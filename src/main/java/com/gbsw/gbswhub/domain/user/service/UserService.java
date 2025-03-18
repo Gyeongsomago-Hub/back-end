@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.user.service;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
+import com.gbsw.gbswhub.domain.user.filter.BadRequestException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public User createUser(CreateUserDto dto){
+
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new BadRequestException("이미 사용 중인 이메일입니다.");
+        }
+
         User user = User.builder()
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))

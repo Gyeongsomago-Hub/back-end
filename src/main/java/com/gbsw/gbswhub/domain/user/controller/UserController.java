@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.user.controller;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
 import com.gbsw.gbswhub.domain.user.db.CreateUserResult;
+import com.gbsw.gbswhub.domain.user.filter.BadRequestException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ public class UserController {
     public ResponseEntity<CreateUserResult> createUser(
             @RequestBody @Valid CreateUserDto dto, BindingResult result) {
 
+        // 유효성 검사 실패 처리
         if (result.hasErrors()) {
             StringBuilder b = new StringBuilder();
             for (ObjectError error : result.getAllErrors()) {
@@ -33,8 +35,11 @@ public class UserController {
             return ResponseEntity.badRequest().body(new CreateUserResult(b.toString(), null));
         }
 
-        User user = userService.createUser(dto);
-        
-        return ResponseEntity.ok(new CreateUserResult("회원가입 성공", user.getEmail()));
+        try {
+            User user = userService.createUser(dto);
+            return ResponseEntity.ok(new CreateUserResult("회원가입 성공", user.getEmail()));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(new CreateUserResult(e.getMessage(), null));
+        }
     }
 }
