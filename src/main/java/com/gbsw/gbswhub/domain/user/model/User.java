@@ -2,6 +2,8 @@ package com.gbsw.gbswhub.domain.user.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -17,10 +19,11 @@ public class User {
     private Long user_id;
 
     @Column(nullable = false)
+    @Size(min = 8, max = 255)
     private String password;
 
     @Email
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
