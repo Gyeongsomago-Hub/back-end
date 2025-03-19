@@ -10,7 +10,9 @@ import com.gbsw.gbswhub.domain.user.model.User.Role;
 @Getter
 @Setter
 public class CreateUserDto {
-    @Email(message = "유효한 이메일 형식이 아닙니다.")
+    @Pattern(
+            regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+            message = "유효한 이메일 형식이 아닙니다.")
     private String email;
 
     @Size(min = 8, max = 255, message = "비밀번호는 8자 이상이여야합니다.")
