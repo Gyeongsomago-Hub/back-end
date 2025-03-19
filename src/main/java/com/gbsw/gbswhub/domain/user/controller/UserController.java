@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.user.controller;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
 import com.gbsw.gbswhub.domain.user.db.CreateUserResult;
+import com.gbsw.gbswhub.domain.user.filter.DuplicateEmailException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import jakarta.validation.Valid;
@@ -33,8 +34,12 @@ public class UserController {
             return ResponseEntity.badRequest().body(new CreateUserResult(b.toString(), null));
         }
 
-        User user = userService.createUser(dto);
-        
-        return ResponseEntity.ok(new CreateUserResult("회원가입 성공", user.getEmail()));
+        try {
+            // 회원가입 처리
+            User user = userService.createUser(dto);
+            return ResponseEntity.ok(new CreateUserResult("회원가입 성공", user.getEmail()));
+        } catch (DuplicateEmailException e) {
+            return ResponseEntity.status(409).body(new CreateUserResult(e.getMessage(), null));
+        }
     }
 }
