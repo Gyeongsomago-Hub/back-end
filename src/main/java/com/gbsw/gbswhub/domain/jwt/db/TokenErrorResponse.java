@@ -1,4 +1,4 @@
-package com.gbsw.gbswhub.domain.auth.db;
+package com.gbsw.gbswhub.domain.jwt.db;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
-    private String result;
+public class TokenErrorResponse {
+    private String message;
 }

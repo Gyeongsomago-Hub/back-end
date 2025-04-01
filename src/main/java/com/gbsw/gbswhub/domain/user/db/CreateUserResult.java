@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateUserResult {
     private String message;
-    private String email;
+    private String username;
 }
