@@ -23,7 +23,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<CreateUserResult> createUser(
+    public
+    ResponseEntity<CreateUserResult> createUser(
             @RequestBody @Valid CreateUserDto dto, BindingResult result) {
 
         if (result.hasErrors()) {

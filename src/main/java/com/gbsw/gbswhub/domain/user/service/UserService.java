@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.user.service;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
+import com.gbsw.gbswhub.domain.user.filter.DataNotFoundException;
 import com.gbsw.gbswhub.domain.user.filter.DuplicateEmailException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,12 @@ public class UserService {
                 .role(dto.getRole())
                 .build();
         return userRepository.save(user);
+    }
+
+    public User getUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new DataNotFoundException("User not found"));
+
+        return user;
     }
 }
