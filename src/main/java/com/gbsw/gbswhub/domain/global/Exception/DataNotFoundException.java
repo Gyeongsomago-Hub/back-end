@@ -1,9 +1,9 @@
-package com.gbsw.gbswhub.domain.user.filter;
+package com.gbsw.gbswhub.domain.global.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class DataNotFoundException extends RuntimeException{
   public DataNotFoundException(String message) {
     super(message);

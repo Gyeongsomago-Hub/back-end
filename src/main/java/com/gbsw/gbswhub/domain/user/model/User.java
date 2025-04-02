@@ -1,11 +1,8 @@
 package com.gbsw.gbswhub.domain.user.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -16,18 +13,26 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long Id;
+
+    @Column(nullable = false, unique = true)
+    private String username; //아이디
 
     @Column(nullable = false)
     @Size(min = 8, max = 255)
-    private String password;
-
-    @Email
-    @Column(nullable = false, unique = true)
-    private String email;
+    private String password; // 비번
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String grade;
+
+    @Column(nullable = false)
+    private String classNumber; //반
+
+    @Column(nullable = false)
+    private String department; //과
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
