@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/login"),
+                                new AntPathRequestMatcher("/api/login/**"),
                                 new AntPathRequestMatcher("/api/signup")
                         )
                         .permitAll()

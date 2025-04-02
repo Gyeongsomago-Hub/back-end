@@ -4,9 +4,11 @@ import com.gbsw.gbswhub.domain.global.Exception.BadRequestException;
 import com.gbsw.gbswhub.domain.global.Exception.DataNotFoundException;
 import com.gbsw.gbswhub.domain.jwt.db.AccessTokenRequest;
 import com.gbsw.gbswhub.domain.jwt.db.AccessTokenResponse;
+import com.gbsw.gbswhub.domain.jwt.db.CreateAccessTokenByRefreshToken;
 import com.gbsw.gbswhub.domain.jwt.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -33,12 +35,29 @@ public class AuthController {
         }
 
         try {
-            String token = tokenService.getAccessToken(request);
-            return ResponseEntity.ok(new AccessTokenResponse("ok", token, null));
+            AccessTokenResponse response = tokenService.getAccessToken(request);
+            if (response != null && response.getToken() != null) {
+                String token = response.getToken();
+                String refreshToken = response.getRefreshToken();
+                return ResponseEntity.ok(new AccessTokenResponse("토큰이 생성되었습니다.", token, refreshToken));
+            } else {
+                return ResponseEntity.status(400).body(new AccessTokenResponse("비밀번호가 올바르지 않습니다."));
+            }
         } catch (BadRequestException e) {
             return ResponseEntity.status(400).body(new AccessTokenResponse(e.getMessage()));
         } catch (DataNotFoundException e) {
             return ResponseEntity.status(400).body(new AccessTokenResponse("아이디가 올바르지 않습니다."));
         }
+    }
+
+    @PostMapping("/login/token")
+    public ResponseEntity<AccessTokenResponse> tokenLogin(
+            @RequestBody CreateAccessTokenByRefreshToken request
+    ) {
+        AccessTokenResponse response = tokenService.refreshAccessToken(request);
+        if(response != null)
+            return ResponseEntity.ok().body(response);
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

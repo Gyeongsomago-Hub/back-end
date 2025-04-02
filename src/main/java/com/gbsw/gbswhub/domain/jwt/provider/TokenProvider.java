@@ -32,7 +32,7 @@ public class TokenProvider {
         parser = Jwts.parser().verifyWith(key).build();
     }
 
-    public String generateToken(User user, Duration expiredAt) {
+    public String generateToken(User user, Duration expiredAt, boolean isAccessToken) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expiredAt.toMillis());
 
@@ -43,6 +43,7 @@ public class TokenProvider {
                 .issuedAt(now)
                 .expiration(expiry)
                 .subject(user.getUsername())
+                .add("type", isAccessToken? "A":"R")
                 .add("id", user.getId())
                 .and()
                 .signWith(key, Jwts.SIG.HS256)
@@ -51,6 +52,9 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
+
+        String type = claims.get("type").toString();
+        if(type == null || !claims.get("type").equals("A")) throw new IllegalArgumentException("");
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("user"));
