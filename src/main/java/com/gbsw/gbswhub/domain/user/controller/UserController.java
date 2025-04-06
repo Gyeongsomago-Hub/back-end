@@ -1,45 +1,32 @@
 package com.gbsw.gbswhub.domain.user.controller;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
-import com.gbsw.gbswhub.domain.user.db.CreateUserResult;
-import com.gbsw.gbswhub.domain.user.filter.DuplicateUsernameException;
-import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "User", description = "User에 관한 API")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/signup")
-    public
-    ResponseEntity<CreateUserResult> createUser(
-            @RequestBody @Valid CreateUserDto dto, BindingResult result) {
-
-        if (result.hasErrors()) {
-            StringBuilder b = new StringBuilder();
-            for (ObjectError error : result.getAllErrors()) {
-                b.append(error.getDefaultMessage()).append(" ");
-            }
-            return ResponseEntity.badRequest().body(new CreateUserResult(b.toString(), null));
-        }
-
-        try {
-            User user = userService.createUser(dto);
-            return ResponseEntity.ok(new CreateUserResult("회원가입 성공", user.getUsername()));
-        } catch (DuplicateUsernameException e) {
-            return ResponseEntity.status(409).body(new CreateUserResult(e.getMessage(), null));
-        }
+    @Operation(summary = "회원가입", description = "새로운 사용자를 생성합니다.")
+    @ApiResponse(responseCode = "200", ref = "#/components/responses/200")
+    @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "409", ref = "#/components/responses/409")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody CreateUserDto createUserDto) {
+        return ResponseEntity.ok(userService.createUser(createUserDto));
     }
 }
