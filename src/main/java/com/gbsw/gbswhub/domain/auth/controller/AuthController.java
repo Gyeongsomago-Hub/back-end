@@ -27,6 +27,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "사용자 로그인", description = "사용자가 로그인 할 때 사용하는 API")
     @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/401")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public  ResponseEntity<Map<String, String>> login(@Valid @RequestBody AccessTokenRequest accessTokenRequest){

@@ -2,18 +2,18 @@ package com.gbsw.gbswhub.domain.global;
 
 import com.gbsw.gbswhub.domain.jwt.filter.TokenAuthenticationFilter;
 import com.gbsw.gbswhub.domain.jwt.filter.TokenExceptionFilter;
+import com.gbsw.gbswhub.domain.global.Exception.JwtAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     private final TokenExceptionFilter tokenExceptionFilter;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     @Order(1)
@@ -40,7 +41,10 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
-                .sessionManagement((sessionManagement) -> sessionManagement
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
