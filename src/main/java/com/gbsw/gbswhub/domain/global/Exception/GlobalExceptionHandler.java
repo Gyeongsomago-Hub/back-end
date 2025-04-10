@@ -3,6 +3,7 @@ package com.gbsw.gbswhub.domain.global.Exception;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,8 +26,8 @@ public class GlobalExceptionHandler{
                         .body(new ErrorResponse(errorCode));
         }
 
-        @ExceptionHandler(AccessDeniedException.class)
-        public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        @ExceptionHandler(AuthorizationDeniedException.class)
+        public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException e) {
                 ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
                 return ResponseEntity
                         .status(errorCode.getStatus())

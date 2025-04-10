@@ -1,8 +1,11 @@
 package com.gbsw.gbswhub.domain.project.Service;
 
 
+import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
+import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
+import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.db.CreateProjectDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
@@ -22,6 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final CategoryRepository categoryRepository;
 
     public Map<String, String> createProject(CreateProjectDto dto, User user) {
 
@@ -55,6 +59,43 @@ public class ProjectService {
         projectRepository.save(project);
         Map<String, String> response = new HashMap<>();
         response.put("message", "프로젝트 모집이 생성되었습니다.");
+        return response;
+    }
+
+    public Map<String, String> createMentoring(CreateMentoringDto dto, User user) {
+
+        if(user == null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        Project project = Project.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .people(dto.getPeople())
+                .type(dto.getType())
+                .status(dto.getStatus())
+                .view_count(0L)
+                .user(user)
+                .category(category)
+                .created_at(LocalDateTime.now())
+                .build();
+
+        List<Stack> StackList = dto.getStacks().stream()
+                .map(name -> {
+                    Stack stack = new Stack();
+                    stack.setStack_name(name);
+                    stack.setProject(project);
+                    return stack;
+                })
+                .toList();
+        project.setStacks(StackList);
+
+        projectRepository.save(project);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "멘토멘티 모집이 생성되었습니다.");
         return response;
     }
 }
