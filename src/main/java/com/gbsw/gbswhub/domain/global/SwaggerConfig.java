@@ -37,11 +37,14 @@ public class SwaggerConfig {
                 )
                 .addResponses("200", createErrorResponse("회원가입이 완료되었습니다.", 200))
                 .addResponses("Project200", createErrorResponse("프로젝트 모집이 생성되었습니다.", 200))
+                .addResponses("Mentoring200", createErrorResponse("멘토멘티 모집이 생성되었습니다.", 200))
+                .addResponses("Category200", createErrorResponse("카테고리가 생성되었습니다.", 200))
                 .addResponses("400", createErrorResponse("잘못된 입력값입니다.", 400))
                 .addResponses("401", createErrorResponse("비밀번호가 일치하지 않습니다.", 401))
                 .addResponses("403", createErrorResponse("권한이 없습니다.", 403))
                 .addResponses("Login401", createErrorResponse("유효하지 않은 토큰입니다.", 401))
-                .addResponses("404", createErrorResponse("사용자가 존재하지 않습니다.", 404))
+                .addResponses("Category404", createErrorResponse("사용자가 존재하지 않습니다.", 404))
+                .addResponses("404", createErrorResponse("카테고리가 존재하지 않습니다.", 404))
                 .addResponses("409", createErrorResponse("이미 사용 중인 아이디입니다.", 409))
                 .addResponses("500", createErrorResponse("서버 내부 오류가 발생했습니다.", 500));
 
