@@ -33,7 +33,6 @@ public class ProjectController {
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
-    @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<Map<String, String>> createProject(
             @Valid @RequestBody CreateProjectDto createProjectDto,
@@ -51,6 +50,7 @@ public class ProjectController {
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<Map<String, String>> createMentoring(
             @Valid @RequestBody CreateMentoringDto createMentoringDto,
