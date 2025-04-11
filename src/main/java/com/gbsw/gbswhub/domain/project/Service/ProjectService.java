@@ -13,6 +13,7 @@ import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
 import com.gbsw.gbswhub.domain.user.model.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -124,6 +125,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ProjectDto getProjectById(Long id) {
         projectRepository.incrementViewCount(id);
 
