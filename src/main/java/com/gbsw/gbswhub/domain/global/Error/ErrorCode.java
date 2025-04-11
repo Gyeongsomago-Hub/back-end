@@ -13,6 +13,8 @@ public enum ErrorCode {
 
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다"),
 
+    PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "프로젝트 모집을 찾을 수 없습니다"),
+
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
 
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰 기한이 만료되었습니다."),
