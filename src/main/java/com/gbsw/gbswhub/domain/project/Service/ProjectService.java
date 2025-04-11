@@ -1,12 +1,14 @@
 package com.gbsw.gbswhub.domain.project.Service;
 
 
+import com.gbsw.gbswhub.domain.category.db.CategoryDto;
 import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
 import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.db.CreateProjectDto;
+import com.gbsw.gbswhub.domain.project.db.ProjectDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -97,5 +99,49 @@ public class ProjectService {
         Map<String, String> response = new HashMap<>();
         response.put("message", "멘토멘티 모집이 생성되었습니다.");
         return response;
+    }
+
+
+    public List<ProjectDto> getAllProject() {
+        List<Project> projects = projectRepository.findAll();
+
+        return projects.stream()
+                .map(project -> {
+                    List<String> stacks = project.getStacks().stream()
+                            .map(Stack::getStack_name)
+                            .collect(Collectors.toList());
+
+                    return new ProjectDto(
+                            project.getProject_id(),
+                            project.getTitle(),
+                            project.getContent(),
+                            project.getPeople(),
+                            project.getView_count(),
+                            stacks,
+                            project.getStatus()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    public ProjectDto getProjectById(Long id) {
+        projectRepository.incrementViewCount(id);
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        List<String> stacks = project.getStacks().stream()
+                .map(Stack::getStack_name)
+                .collect(Collectors.toList());
+
+        return new ProjectDto(
+                project.getProject_id(),
+                project.getTitle(),
+                project.getContent(),
+                project.getPeople(),
+                project.getView_count(),
+                stacks,
+                project.getStatus()
+        );
     }
 }

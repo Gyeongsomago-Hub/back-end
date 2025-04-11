@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입", description = "새로운 사용자를 생성합니다.")
-    @ApiResponse(responseCode = "200", ref = "#/components/responses/200")
+    @ApiResponse(responseCode = "201", ref = "#/components/responses/201")
     @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
     @ApiResponse(responseCode = "409", ref = "#/components/responses/409")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")

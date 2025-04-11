@@ -49,7 +49,6 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "카테고리 목록 조회 성공",
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = CategoryDto.class))))
-    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<List<CategoryDto>> getAllCategory() {
         return ResponseEntity.ok(categoryService.getAllCategory());
@@ -60,8 +59,7 @@ public class CategoryController {
     @ApiResponse(responseCode = "200", description = "카테고리 조회 성공",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = CategoryDto.class)))
-    @ApiResponse(responseCode = "200", ref = "#/components/responses/200")
-    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable Long id) {
         CategoryDto category = categoryService.getCategoryById(id);
