@@ -1,21 +1,16 @@
 package com.gbsw.gbswhub.domain.project.Service;
 
-
-import com.gbsw.gbswhub.domain.category.db.CategoryDto;
 import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
 import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
-import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
-import com.gbsw.gbswhub.domain.project.db.CreateProjectDto;
-import com.gbsw.gbswhub.domain.project.db.ProjectDto;
-import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
+import com.gbsw.gbswhub.domain.project.db.*;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
+import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,20 +18,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+
+    private List<Stack> convertToStacks(List<String> stackNames, Project project) {
+        return stackNames.stream()
+                .map(stackName -> {
+                    Stack stack = new Stack();
+                    stack.setStack_name(stackName);
+                    stack.setProject(project);
+                    return stack;
+                })
+                .collect(Collectors.toList());
+    }
 
     public Map<String, String> createProject(CreateProjectDto dto, User user) {
-
-
-        if(user == null){
+        if (user == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
-
 
         Project project = Project.builder()
                 .title(dto.getTitle())
@@ -49,15 +53,8 @@ public class ProjectService {
                 .created_at(LocalDateTime.now())
                 .build();
 
-        List<Stack> StackList = dto.getStacks().stream()
-                        .map(name -> {
-                            Stack stack = new Stack();
-                            stack.setStack_name(name);
-                            stack.setProject(project);
-                            return stack;
-                        })
-                                .toList();
-        project.setStacks(StackList);
+        // 헬퍼 메서드 사용
+        project.setStacks(convertToStacks(dto.getStacks(), project));
 
         projectRepository.save(project);
         Map<String, String> response = new HashMap<>();
@@ -66,8 +63,7 @@ public class ProjectService {
     }
 
     public Map<String, String> createMentoring(CreateMentoringDto dto, User user) {
-
-        if(user == null){
+        if (user == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -86,22 +82,14 @@ public class ProjectService {
                 .created_at(LocalDateTime.now())
                 .build();
 
-        List<Stack> StackList = dto.getStacks().stream()
-                .map(name -> {
-                    Stack stack = new Stack();
-                    stack.setStack_name(name);
-                    stack.setProject(project);
-                    return stack;
-                })
-                .toList();
-        project.setStacks(StackList);
+        // 헬퍼 메서드 사용
+        project.setStacks(convertToStacks(dto.getStacks(), project));
 
         projectRepository.save(project);
         Map<String, String> response = new HashMap<>();
         response.put("message", "멘토멘티 모집이 생성되었습니다.");
         return response;
     }
-
 
     public List<ProjectDto> getAllProject() {
         List<Project> projects = projectRepository.findAll();
@@ -143,6 +131,45 @@ public class ProjectService {
                 project.getPeople(),
                 project.getView_count(),
                 stacks,
+                project.getStatus()
+        );
+    }
+
+    public ProjectDto UpdateProject(Long projectId, ProjectDto dto, User user) {
+
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        if(!project.getUser().getId().equals(user.getId())){
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        project.setTitle(dto.getTitle());
+        project.setContent(dto.getContent());
+        project.setPeople(dto.getPeople());
+        project.getStacks().clear();
+        if (dto.getStack() != null) {
+            project.getStacks().addAll(convertToStacks(dto.getStack(), project));
+        }
+        project.setStatus(dto.getStatus());
+
+        projectRepository.save(project);
+
+        List<String> stack = project.getStacks().stream()
+                .map(Stack::getStack_name)
+                .collect(Collectors.toList());
+
+        return new ProjectDto(
+                project.getProject_id(),
+                project.getTitle(),
+                project.getContent(),
+                project.getPeople(),
+                project.getView_count(),
+                stack,
                 project.getStatus()
         );
     }
