@@ -86,4 +86,24 @@ public class ProjectController {
 
         return ResponseEntity.ok(project);
     }
+
+    @PatchMapping("/modify/{id}")
+    @ApiResponse(responseCode = "200", description = "프로젝트 모집 수정 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ProjectDto.class)))
+    @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Project404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<ProjectDto> updateProject(
+            @PathVariable Long id,
+            @Valid @RequestBody ProjectDto dto,
+            Principal principal){
+
+        User user = userService.getUser(principal.getName());
+
+        ProjectDto project = projectService.UpdateProject(id, dto, user);
+        return ResponseEntity.ok(project);
+    }
 }
