@@ -36,6 +36,7 @@ public class SwaggerConfig {
                         .addProperty("status", new Schema<Integer>())
                 )
                 .addResponses("200", createErrorResponse("회원가입이 완료되었습니다.", 200))
+                .addResponses("204", createErrorResponse("삭제 성공", 204))
                 .addResponses("Project200", createErrorResponse("프로젝트 모집이 생성되었습니다.", 200))
                 .addResponses("Mentoring200", createErrorResponse("멘토멘티 모집이 생성되었습니다.", 200))
                 .addResponses("Category200", createErrorResponse("카테고리가 생성되었습니다.", 200))
