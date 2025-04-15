@@ -4,11 +4,14 @@ import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
 import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
+import com.gbsw.gbswhub.domain.jwt.provider.TokenProvider;
 import com.gbsw.gbswhub.domain.project.db.*;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
+import com.gbsw.gbswhub.domain.project.model.Type;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
+import com.gbsw.gbswhub.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,23 +22,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.project.model.Project.Type.PROJECT;
+import static com.gbsw.gbswhub.domain.project.util.StackConverter.convertToStacks;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
+    private final UserService userService;
 
-    private List<Stack> convertToStacks(List<String> stackNames, Project project) {
-        return stackNames.stream()
-                .map(stackName -> {
-                    Stack stack = new Stack();
-                    stack.setStack_name(stackName);
-                    stack.setProject(project);
-                    return stack;
-                })
-                .collect(Collectors.toList());
-    }
 
     public Map<String, String> createProject(CreateProjectDto dto, User user) {
         if (user == null) {
@@ -62,37 +59,8 @@ public class ProjectService {
         return response;
     }
 
-    public Map<String, String> createMentoring(CreateMentoringDto dto, User user) {
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
-
-        Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
-
-        Project project = Project.builder()
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .people(dto.getPeople())
-                .type(dto.getType())
-                .status(dto.getStatus())
-                .view_count(0L)
-                .user(user)
-                .category(category)
-                .created_at(LocalDateTime.now())
-                .build();
-
-        // 헬퍼 메서드 사용
-        project.setStacks(convertToStacks(dto.getStacks(), project));
-
-        projectRepository.save(project);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "멘토멘티 모집이 생성되었습니다.");
-        return response;
-    }
-
     public List<ProjectDto> getAllProject() {
-        List<Project> projects = projectRepository.findAll();
+        List<Project> projects = projectRepository.findByType(PROJECT);
 
         return projects.stream()
                 .map(project -> {
@@ -135,7 +103,7 @@ public class ProjectService {
         );
     }
 
-    public ProjectDto UpdateProject(Long projectId, ProjectDto dto, User user) {
+    public ProjectDto UpdateProject(Long projectId, UpdateProjectDto dto, User user) {
 
         if (user == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
@@ -172,5 +140,21 @@ public class ProjectService {
                 stack,
                 project.getStatus()
         );
+    }
+
+    public void deleteProject(Long id, User user){
+
+        if(user==null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Project project = projectRepository.findById(id)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        if(!project.getUser().getId().equals(user.getId())){
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        projectRepository.deleteById(id);
     }
 }
