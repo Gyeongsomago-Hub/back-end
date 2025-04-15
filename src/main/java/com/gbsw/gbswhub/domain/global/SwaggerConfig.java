@@ -46,6 +46,7 @@ public class SwaggerConfig {
                 .addResponses("Login401", createErrorResponse("유효하지 않은 토큰입니다.", 401))
                 .addResponses("Category404", createErrorResponse("카테고리가 존재하지 않습니다.", 404))
                 .addResponses("Project404", createErrorResponse("프로젝트 모집이 존재하지 않습니다.", 404))
+                .addResponses("Mentoring404", createErrorResponse("멘토멘티 모집이 존재하지 않습니다.", 404))
                 .addResponses("404", createErrorResponse("사용지기 존재하지 않습니다.", 404))
                 .addResponses("409", createErrorResponse("이미 사용 중인 아이디입니다.", 409))
                 .addResponses("500", createErrorResponse("서버 내부 오류가 발생했습니다.", 500));

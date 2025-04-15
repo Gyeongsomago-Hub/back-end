@@ -15,6 +15,8 @@ public enum ErrorCode {
 
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "프로젝트 모집을 찾을 수 없습니다"),
 
+    MENTORING_NOT_FOUND(HttpStatus.NOT_FOUND, "멘토멘티 모집을 찾을 수 없습니다"),
+
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
 
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰 기한이 만료되었습니다."),

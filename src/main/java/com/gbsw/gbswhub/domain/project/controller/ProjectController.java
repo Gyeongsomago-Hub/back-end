@@ -2,7 +2,6 @@ package com.gbsw.gbswhub.domain.project.controller;
 
 
 import com.gbsw.gbswhub.domain.project.Service.ProjectService;
-import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.db.CreateProjectDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectDto;
 import com.gbsw.gbswhub.domain.project.db.UpdateProjectDto;
@@ -51,7 +50,7 @@ public class ProjectController {
 
     @GetMapping()
     @Operation(summary = "프로젝트 전체 조회", description = "프로젝트 모집을 전체 조회합니다.")
-    @ApiResponse(responseCode = "200", description = "프로젝트 목록 조회 성공",
+    @ApiResponse(responseCode = "200", description = "프로젝트 모집 목록 조회 성공",
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = ProjectDto.class))))
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
