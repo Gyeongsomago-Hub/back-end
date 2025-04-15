@@ -5,16 +5,24 @@ import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
+import com.gbsw.gbswhub.domain.project.db.MentoringDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
+import com.gbsw.gbswhub.domain.project.model.Stack;
+import com.gbsw.gbswhub.domain.project.model.Type;
+import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.project.model.Project.Type.MENTORING;
 import static com.gbsw.gbswhub.domain.project.util.StackConverter.convertToStacks;
 
 @Service
@@ -22,6 +30,7 @@ import static com.gbsw.gbswhub.domain.project.util.StackConverter.convertToStack
 public class MentoringService {
     private final ProjectRepository projectRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     public Map<String, String> createMentoring(CreateMentoringDto dto, User user) {
 
@@ -51,4 +60,56 @@ public class MentoringService {
         response.put("message", "멘토멘티 모집이 생성되었습니다.");
         return response;
     }
+
+    public List<MentoringDto> getAllMentoring() {
+        List<Project> projects = projectRepository.findByType(MENTORING);
+        return projects.stream()
+                .map(project -> {
+                    List<String> stack = project.getStacks().stream()
+                            .map(Stack::getStack_name)
+                            .collect(Collectors.toList());
+
+                    return new MentoringDto(
+                            project.getProject_id(),
+                            project.getTitle(),
+                            project.getContent(),
+                            project.getPeople(),
+                            project.getView_count(),
+                            stack,
+                            project.getStatus(),
+                            project.getCategory().getCategory_id()
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public MentoringDto getMentoringById(Long id){
+        projectRepository.incrementViewCount(id);
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
+
+        if(project.getType() != Project.Type.MENTORING){
+            throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
+        }
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        List<String> stack = project.getStacks().stream()
+                .map(Stack::getStack_name)
+                .collect(Collectors.toList());
+
+        return new MentoringDto(
+                project.getProject_id(),
+                project.getTitle(),
+                project.getContent(),
+                project.getPeople(),
+                project.getView_count(),
+                stack,
+                project.getStatus(),
+                project.getCategory().getCategory_id()
+        );
+    }
 }
+

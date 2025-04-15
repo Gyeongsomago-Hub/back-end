@@ -8,7 +8,6 @@ import com.gbsw.gbswhub.domain.jwt.provider.TokenProvider;
 import com.gbsw.gbswhub.domain.project.db.*;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
-import com.gbsw.gbswhub.domain.project.model.Type;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -32,6 +31,7 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final CategoryRepository categoryRepository;
 
 
     public Map<String, String> createProject(CreateProjectDto dto, User user) {
@@ -64,7 +64,7 @@ public class ProjectService {
 
         return projects.stream()
                 .map(project -> {
-                    List<String> stacks = project.getStacks().stream()
+                    List<String> stack = project.getStacks().stream()
                             .map(Stack::getStack_name)
                             .collect(Collectors.toList());
 
@@ -74,7 +74,7 @@ public class ProjectService {
                             project.getContent(),
                             project.getPeople(),
                             project.getView_count(),
-                            stacks,
+                            stack,
                             project.getStatus()
                     );
                 })
@@ -88,7 +88,8 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
-        List<String> stacks = project.getStacks().stream()
+
+        List<String> stack = project.getStacks().stream()
                 .map(Stack::getStack_name)
                 .collect(Collectors.toList());
 
@@ -98,7 +99,7 @@ public class ProjectService {
                 project.getContent(),
                 project.getPeople(),
                 project.getView_count(),
-                stacks,
+                stack,
                 project.getStatus()
         );
     }

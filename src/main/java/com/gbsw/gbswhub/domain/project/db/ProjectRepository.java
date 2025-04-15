@@ -1,7 +1,6 @@
 package com.gbsw.gbswhub.domain.project.db;
 
 import com.gbsw.gbswhub.domain.project.model.Project;
-import com.gbsw.gbswhub.domain.project.model.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
