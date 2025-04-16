@@ -3,6 +3,7 @@ package com.gbsw.gbswhub.domain.project.controller;
 import com.gbsw.gbswhub.domain.project.Service.MentoringService;
 import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.db.MentoringDto;
+import com.gbsw.gbswhub.domain.project.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,9 +65,30 @@ public class MentoringController {
                     schema = @Schema(implementation = MentoringDto.class)))
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/Mentoring404")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<MentoringDto> getMentoringById(@PathVariable Long id){
         MentoringDto mentoring = mentoringService.getMentoringById(id);
+
+        return ResponseEntity.ok(mentoring);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "멘토멘티 수정", description = "멘토멘티 모집을 수정합니다.")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Mentoring404")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<MentoringDto> updateMentoring(
+            @PathVariable Long id,
+            @Valid @RequestBody  UpdateMentoringDto dto,
+            Principal principal) {
+
+        User user = userService.getUser(principal.getName());
+
+        MentoringDto mentoring = mentoringService.updateMentoring(id, dto, user);
 
         return ResponseEntity.ok(mentoring);
     }
