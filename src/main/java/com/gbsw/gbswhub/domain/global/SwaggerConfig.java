@@ -42,7 +42,7 @@ public class SwaggerConfig {
                 .addResponses("Category200", createErrorResponse("카테고리가 생성되었습니다.", 200))
                 .addResponses("400", createErrorResponse("잘못된 입력값입니다.", 400))
                 .addResponses("401", createErrorResponse("비밀번호가 일치하지 않습니다.", 401))
-                .addResponses("403", createErrorResponse("권한이 없습니다.", 403))
+                .addResponses("403", createErrorResponse("접근 권한이 없습니다.", 403))
                 .addResponses("Login401", createErrorResponse("유효하지 않은 토큰입니다.", 401))
                 .addResponses("Category404", createErrorResponse("카테고리가 존재하지 않습니다.", 404))
                 .addResponses("Project404", createErrorResponse("프로젝트 모집이 존재하지 않습니다.", 404))

@@ -7,9 +7,9 @@ import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.db.MentoringDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
+import com.gbsw.gbswhub.domain.project.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
-import com.gbsw.gbswhub.domain.project.model.Type;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
 import jakarta.transaction.Transactional;
@@ -95,6 +95,50 @@ public class MentoringService {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        List<String> stack = project.getStacks().stream()
+                .map(Stack::getStack_name)
+                .collect(Collectors.toList());
+
+        return new MentoringDto(
+                project.getProject_id(),
+                project.getTitle(),
+                project.getContent(),
+                project.getPeople(),
+                project.getView_count(),
+                stack,
+                project.getStatus(),
+                project.getCategory().getCategory_id()
+        );
+    }
+
+    public MentoringDto updateMentoring(Long mentoringId, UpdateMentoringDto dto, User user) {
+
+        if(user == null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Project project = projectRepository.findById(mentoringId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
+
+        if(!project.getUser().getId().equals(user.getId())){
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        project.setTitle(dto.getTitle());
+        project.setContent(dto.getContent());
+        project.setPeople(dto.getPeople());
+        project.getStacks().clear();
+        if (dto.getStack() != null) {
+            project.getStacks().addAll(convertToStacks(dto.getStack(), project));
+        }
+        project.setStatus(dto.getStatus());
+
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                        .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+        project.setCategory(category);
+
+        projectRepository.save(project);
 
         List<String> stack = project.getStacks().stream()
                 .map(Stack::getStack_name)
