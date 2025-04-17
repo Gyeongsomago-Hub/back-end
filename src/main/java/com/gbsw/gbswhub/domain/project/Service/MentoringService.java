@@ -93,8 +93,9 @@ public class MentoringService {
             throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
         }
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+        if (project.getCategory() == null) {
+            throw new BusinessException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
 
         List<String> stack = project.getStacks().stream()
                 .map(Stack::getStack_name)
@@ -120,6 +121,10 @@ public class MentoringService {
 
         Project project = projectRepository.findById(mentoringId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
+
+        if (project.getType() != Project.Type.MENTORING) {
+            throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
+        }
 
         if(!project.getUser().getId().equals(user.getId())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
@@ -154,6 +159,27 @@ public class MentoringService {
                 project.getStatus(),
                 project.getCategory().getCategory_id()
         );
+    }
+
+    public void deleteMentoring(Long  id, User user){
+
+        if(user == null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Project project = projectRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
+
+        if (project.getType() != Project.Type.MENTORING) {
+            throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
+        }
+
+
+        if (!project.getUser().getId().equals(user.getId())) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        projectRepository.delete(project);
     }
 }
 

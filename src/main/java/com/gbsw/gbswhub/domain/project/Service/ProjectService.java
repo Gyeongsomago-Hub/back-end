@@ -1,7 +1,6 @@
 package com.gbsw.gbswhub.domain.project.Service;
 
 import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
-import com.gbsw.gbswhub.domain.category.model.Category;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.jwt.provider.TokenProvider;
@@ -113,6 +112,10 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
+        if (project.getType() != Project.Type.PROJECT) {
+            throw new BusinessException(ErrorCode.PROJECT_NOT_FOUND);
+        }
+
         if(!project.getUser().getId().equals(user.getId())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
@@ -152,10 +155,14 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                         .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
 
+        if (project.getType() != Project.Type.PROJECT) {
+            throw new BusinessException(ErrorCode.PROJECT_NOT_FOUND);
+        }
+
         if(!project.getUser().getId().equals(user.getId())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
-        projectRepository.deleteById(id);
+        projectRepository.delete(project);
     }
 }
