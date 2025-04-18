@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -33,6 +34,14 @@ public class UpdateMentoringDto {
     @NotEmpty(message = "스택은 비어있을 수 없습니다.")
     @Schema(example = "[\"ios\", \"frontend\", \"backend\"]")
     private List<@NotBlank String> stack;
+
+    @NotNull(message = "시작일은 비어있을 수 없습니다.")
+    @Schema(example = "2025-04-18")
+    private LocalDate openDate;
+
+    @NotNull(message = "마감일은 비어있을 수 없습니다.")
+    @Schema(example = "2023-04-25")
+    private LocalDate closeDate;
 
     private Project.Status status = Project.Status.RECRUITING;
 
