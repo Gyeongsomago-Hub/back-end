@@ -49,6 +49,8 @@ public class MentoringService {
                 .status(dto.getStatus())
                 .view_count(0L)
                 .user(user)
+                .openDate(dto.getOpenDate())
+                .closeDate(dto.getCloseDate())
                 .category(category)
                 .created_at(LocalDateTime.now())
                 .build();
@@ -76,6 +78,8 @@ public class MentoringService {
                             project.getPeople(),
                             project.getView_count(),
                             stack,
+                            project.getOpenDate(),
+                            project.getCloseDate(),
                             project.getStatus(),
                             project.getCategory().getCategory_id()
                     );
@@ -108,6 +112,8 @@ public class MentoringService {
                 project.getPeople(),
                 project.getView_count(),
                 stack,
+                project.getOpenDate(),
+                project.getCloseDate(),
                 project.getStatus(),
                 project.getCategory().getCategory_id()
         );
@@ -137,6 +143,8 @@ public class MentoringService {
         if (dto.getStack() != null) {
             project.getStacks().addAll(convertToStacks(dto.getStack(), project));
         }
+        project.setOpenDate(dto.getOpenDate());
+        project.setCloseDate(dto.getCloseDate());
         project.setStatus(dto.getStatus());
 
         Category category = categoryRepository.findById(dto.getCategoryId())
@@ -156,6 +164,8 @@ public class MentoringService {
                 project.getPeople(),
                 project.getView_count(),
                 stack,
+                project.getOpenDate(),
+                project.getCloseDate(),
                 project.getStatus(),
                 project.getCategory().getCategory_id()
         );
