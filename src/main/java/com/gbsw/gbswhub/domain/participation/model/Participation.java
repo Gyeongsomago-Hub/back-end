@@ -4,10 +4,7 @@ import com.gbsw.gbswhub.domain.club.model.Club;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.user.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Participation {
 
     @Id
@@ -45,13 +43,12 @@ public class Participation {
     private String name;
 
     @Column
-    private Integer grade;
+    private String grade;
+    @Column
+    private String classNo;
 
     @Column
-    private Integer classNo;
-
-    @Column
-    private Integer studentNo;
+    private String studentNo;
 
     @CreatedDate
     @Column(nullable = false)
@@ -75,7 +72,5 @@ public class Participation {
         REQUESTED,
         APPROVED,
         REJECTED,
-        MENTOR,
-        MENTEE
     }
 }
