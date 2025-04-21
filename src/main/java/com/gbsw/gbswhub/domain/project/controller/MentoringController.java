@@ -37,7 +37,6 @@ public class MentoringController {
     @ApiResponse(responseCode = "200", ref = "#/components/responses/Mentoring200")
     @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
-    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/Category404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<Map<String, String>> createMentoring(

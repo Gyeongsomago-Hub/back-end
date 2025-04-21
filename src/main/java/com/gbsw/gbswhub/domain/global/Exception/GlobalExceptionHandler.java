@@ -2,7 +2,9 @@ package com.gbsw.gbswhub.domain.global.Exception;
 
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Error.ErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +19,13 @@ import java.util.Map;
 @RestControllerAdvice(basePackages = "com.gbsw.gbswhub.domain")
 public class GlobalExceptionHandler{
 
+        @ExceptionHandler(BusinessException.class)
+        public ResponseEntity<ErrorResponse> handleEnumParsingError(BusinessException e) {
+                ErrorCode errorCode = e.getErrorCode();
+                return ResponseEntity
+                        .status(errorCode.getStatus())
+                        .body(new ErrorResponse(errorCode));
+        }
 
         @ExceptionHandler(BusinessException.class)
         public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
