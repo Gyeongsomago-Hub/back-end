@@ -7,14 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
 
-    private String id;
-
+    private Long id;
 
     @Schema(example = "suhwan3116")
     private String username;
@@ -28,17 +28,9 @@ public class UserDto {
     @Schema(example = "1반")
     private String classNumber;
 
+    @Schema(example = "소프트웨어개발과")
     private String department;
 
+    @Schema(example = "USER")
     private User.Role role = User.Role.USER;
-
-
-    public UserDto(Long id, String username, String name, String grade, String classNumber, String department) {
-        this.username = username;
-        this.name = name;
-        this.grade = grade;
-        this.classNumber = classNumber;
-        this.department = department;
-        this.id = id != null ? id.toString() : null;
-    }
 }

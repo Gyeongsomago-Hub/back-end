@@ -37,6 +37,7 @@ public class CreateUserDto {
     private String classNumber;
 
     @NotBlank(message = "과를 입력해주세요")
+    @Schema(example = "소프트웨어개발과")
     private String department;
 
     @Schema(description = "USER, ADMIN, CLUB_LEADER")

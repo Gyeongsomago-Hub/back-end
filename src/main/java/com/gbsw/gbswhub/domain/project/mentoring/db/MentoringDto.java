@@ -1,4 +1,4 @@
-package com.gbsw.gbswhub.domain.project.db;
+package com.gbsw.gbswhub.domain.project.mentoring.db;
 
 import com.gbsw.gbswhub.domain.project.model.Project;
 import io.swagger.v3.oas.annotations.media.Schema;

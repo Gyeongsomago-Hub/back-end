@@ -47,17 +47,7 @@ public class UserController {
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<UserDto> getUserInfo(Principal principal){
-        User user = userService.getUser(principal.getName());
 
-        UserDto userDto = new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getName(),
-                user.getGrade(),
-                user.getClassNumber(),
-                user.getDepartment()
-        );
-
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
     }
 }

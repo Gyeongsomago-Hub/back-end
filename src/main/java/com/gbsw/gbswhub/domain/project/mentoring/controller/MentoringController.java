@@ -1,10 +1,9 @@
-package com.gbsw.gbswhub.domain.project.controller;
+package com.gbsw.gbswhub.domain.project.mentoring.controller;
 
 import com.gbsw.gbswhub.domain.project.Service.MentoringService;
-import com.gbsw.gbswhub.domain.project.db.CreateMentoringDto;
-import com.gbsw.gbswhub.domain.project.db.MentoringDto;
-import com.gbsw.gbswhub.domain.project.db.UpdateMentoringDto;
-import com.gbsw.gbswhub.domain.user.db.UserRepository;
+import com.gbsw.gbswhub.domain.project.mentoring.db.CreateMentoringDto;
+import com.gbsw.gbswhub.domain.project.mentoring.db.MentoringDto;
+import com.gbsw.gbswhub.domain.project.mentoring.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,6 @@ public class MentoringController {
 
     private final MentoringService mentoringService;
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @PostMapping()
     @Operation(summary = "멘토멘티 생성", description = "멘토멘티 모집을 생성합니다.")
