@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @Tag(name = "User", description = "User에 관한 API")
 public class UserController {
 

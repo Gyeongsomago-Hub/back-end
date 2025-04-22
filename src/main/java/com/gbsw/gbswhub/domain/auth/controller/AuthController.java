@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @Tag(name = "Auth", description = "인증에 관한 API")
 public class AuthController {
     private final TokenService tokenService;
