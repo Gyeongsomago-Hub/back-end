@@ -40,6 +40,7 @@ public class User {
 
     public enum Role {
         USER,
-        ADMIN
+        ADMIN,
+        CLUB_LEADER
     }
 }

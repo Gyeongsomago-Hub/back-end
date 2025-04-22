@@ -26,7 +26,7 @@ public class Club {
     @Column(nullable = false)
     private String location;
 
-    @Column
+    @Column(nullable = false)
     private String target;
 
     @Column(nullable = false)

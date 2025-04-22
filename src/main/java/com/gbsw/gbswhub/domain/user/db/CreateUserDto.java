@@ -39,5 +39,6 @@ public class CreateUserDto {
     @NotBlank(message = "과를 입력해주세요")
     private String department;
 
+    @Schema(description = "USER, ADMIN, CLUB_LEADER")
     private Role role = Role.USER;
 }

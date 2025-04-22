@@ -69,7 +69,6 @@ public class ProjectController {
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<ProjectDto> getProjectById(@PathVariable Long id){
         ProjectDto project = projectService.getProjectById(id);
-
         return ResponseEntity.ok(project);
     }
 
