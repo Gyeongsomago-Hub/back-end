@@ -45,6 +45,7 @@ public class TokenProvider {
                 .subject(user.getUsername())
                 .add("type", isAccessToken? "A":"R")
                 .add("id", user.getId())
+                .add("role", user.getRole().name())
                 .and()
                 .signWith(key, Jwts.SIG.HS256)
                 .compact();
@@ -58,6 +59,7 @@ public class TokenProvider {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("user"));
+        authorities.add(new SimpleGrantedAuthority("club_leader"));
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(claims.getSubject())

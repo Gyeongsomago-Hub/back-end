@@ -51,6 +51,7 @@ public class SwaggerConfig {
                 .addResponses("Project404", createErrorResponse("프로젝트 모집을 찾을 수 없습니다.", 404))
                 .addResponses("Mentoring404", createErrorResponse("멘토멘티 모집을 찾을 수 없습니다.", 404))
                 .addResponses("RequestMentoring404", createErrorResponse("멘토멘티 신청을 찾을 수 없습니다.", 404))
+                .addResponses("Club404", createErrorResponse("동아리 모집 공고를 찾을 수 없습니다.", 404))
                 .addResponses("404", createErrorResponse("사용자를 찾을 수 없습니다.", 404))
                 .addResponses("409", createErrorResponse("이미 사용 중인 아이디입니다.", 409))
                 .addResponses("500", createErrorResponse("서버 내부 오류가 발생했습니다.", 500));
