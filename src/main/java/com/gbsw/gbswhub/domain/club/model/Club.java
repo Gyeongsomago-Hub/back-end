@@ -4,9 +4,12 @@ import com.gbsw.gbswhub.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Club {
@@ -23,21 +26,19 @@ public class Club {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
+    @Column
     private String target;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Club_type type;
+    private String type;
 
+    @Column(nullable = false)
+    private LocalDate openDate;
+
+    @Column(nullable = false)
+    private LocalDate closeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-}
-
-
-enum Club_type {
-    MAJOR,
-    ACTIVITY
 }

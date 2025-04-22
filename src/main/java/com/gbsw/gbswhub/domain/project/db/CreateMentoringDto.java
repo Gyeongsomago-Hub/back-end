@@ -47,7 +47,7 @@ public class CreateMentoringDto {
     @Schema(example = "MENTORING")
     private Project.Type type = Project.Type.MENTORING;
 
-    @NotNull(message = "카테고리를 선택해주세요.")
+    @NotNull(message = "카테고리 ID를 입력해주세요.")
     @Schema(description = "카테고리 테이블에 저장된 ID", example = "1")
     private Long categoryId;
 }

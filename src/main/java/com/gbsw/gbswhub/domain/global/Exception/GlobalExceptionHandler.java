@@ -19,13 +19,6 @@ import java.util.Map;
 @RestControllerAdvice(basePackages = "com.gbsw.gbswhub.domain")
 public class GlobalExceptionHandler{
 
-        @ExceptionHandler(BusinessException.class)
-        public ResponseEntity<ErrorResponse> handleEnumParsingError(BusinessException e) {
-                ErrorCode errorCode = e.getErrorCode();
-                return ResponseEntity
-                        .status(errorCode.getStatus())
-                        .body(new ErrorResponse(errorCode));
-        }
 
         @ExceptionHandler(BusinessException.class)
         public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
