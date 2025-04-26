@@ -24,5 +24,5 @@ public class RequestProjectDto {
     private Participation.Type type = Participation.Type.PROJECT;
 
     @Schema(example = "REQUESTED")
-    private Participation.Status status = Participation.Status.REQUESTED;
+    private Participation.Status status = Participation.Status.APPROVED;
 }

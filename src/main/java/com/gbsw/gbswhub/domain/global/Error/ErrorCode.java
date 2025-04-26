@@ -19,7 +19,9 @@ public enum ErrorCode {
 
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "동아리 모집 공고를 찾을 수 없습니다"),
 
-    PARTICIPATION_NOT_FOUND(HttpStatus.NOT_FOUND, "멘토멘티 신청을 찾을 수 없습니다."),
+    PART_MENTORING_NOT_FOUND(HttpStatus.NOT_FOUND, "멘토멘티 신청을 찾을 수 없습니다."),
+
+    PART_CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "동아리 신청을 찾을 수 없습니다."),
 
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
 

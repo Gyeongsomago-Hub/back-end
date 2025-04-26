@@ -1,8 +1,6 @@
 package com.gbsw.gbswhub.domain.participation.controller;
 
-import com.gbsw.gbswhub.domain.participation.db.UpdateMentoringStatusDto;
-import com.gbsw.gbswhub.domain.participation.db.RequestMentoringDto;
-import com.gbsw.gbswhub.domain.participation.db.RequestProjectDto;
+import com.gbsw.gbswhub.domain.participation.db.*;
 import com.gbsw.gbswhub.domain.participation.service.ParticipationService;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -51,8 +49,21 @@ public class ParticipationController {
         return ResponseEntity.ok(participationService.RequestMentoring(dto, user));
     }
 
+    @PostMapping("/club")
+    @Operation(summary = "동아리 참가 요청", description = "동아리 참가 요청을 보냅니다.")
+    @ApiResponse(responseCode = "200", ref = "#/components/responses/RequestClub200")
+    @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/Club404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<Map<String, String>> RequestClub(@Valid @RequestBody RequestClubDto dto, Principal principal){
+        User user = userService.getUser(principal.getName());
+
+        return ResponseEntity.ok(participationService.requestClub(dto, user));
+    }
+
     @PatchMapping("/mentoring/{id}")
-    @Operation(summary = "멘토멘티 신청 승인 및 거절", description = "멘토멘티 신청을 승인 및 거절합니다.")
+    @Operation(summary = "멘토멘티 신청 승인 및 거절", description = "멘토 신청을 승인 및 거절합니다.")
     @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
@@ -65,5 +76,21 @@ public class ParticipationController {
         User user = userService.getUser(principal.getName());
 
         return ResponseEntity.ok(participationService.updateMentoringStatus(id, dto.getStatus(), user));
+    }
+
+    @PatchMapping("/club/{id}")
+    @Operation(summary = "동아리 신청 승인 및 거절", description = "동아리 신청을 승인 및 거절합니다.")
+    @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/RequestClub404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<UpdateClubStatusDto> updateClubStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateClubStatusDto dto,
+            Principal principal) {
+        User user = userService.getUser(principal.getName());
+
+        return ResponseEntity.ok(participationService.updateClubStatus(id, dto.getStatus(), user));
     }
 }

@@ -33,7 +33,7 @@ public class Participation {
     @JoinColumn(name = "club_id", nullable = true)
     private Club club;
 
-    @Column(nullable = false)
+    @Column
     private String position;
 
     @Column

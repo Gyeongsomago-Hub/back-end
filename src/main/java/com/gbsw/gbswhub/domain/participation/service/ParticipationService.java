@@ -1,11 +1,10 @@
 package com.gbsw.gbswhub.domain.participation.service;
 
+import com.gbsw.gbswhub.domain.club.model.Club;
+import com.gbsw.gbswhub.domain.club.repository.ClubRepository;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
-import com.gbsw.gbswhub.domain.participation.db.UpdateMentoringStatusDto;
-import com.gbsw.gbswhub.domain.participation.db.RequestMentoringDto;
-import com.gbsw.gbswhub.domain.participation.db.RequestProjectDto;
-import com.gbsw.gbswhub.domain.participation.db.ParticipationRepository;
+import com.gbsw.gbswhub.domain.participation.db.*;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
@@ -22,6 +21,7 @@ import java.util.Map;
 public class ParticipationService {
     private final ParticipationRepository participationRepository;
     private final ProjectRepository projectRepository;
+    private final ClubRepository clubRepository;
 
     public Map<String, String> RequestProject(RequestProjectDto dto, User user) {
 
@@ -84,11 +84,38 @@ public class ParticipationService {
         return response;
     }
 
+    public Map<String, String> requestClub(RequestClubDto dto, User user){
+        if(user == null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Club club = clubRepository.findById(dto.getClubId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+
+        Participation participation = Participation.builder()
+                .introduce(dto.getIntroduce())
+                .name(dto.getName())
+                .grade(dto.getGrade())
+                .classNo(dto.getClassNo())
+                .studentNo(dto.getStudentNo())
+                .status(dto.getStatus())
+                .type(dto.getType())
+                .user(user)
+                .club(club)
+                .created_at(LocalDateTime.now())
+                .build();
+        participationRepository.save(participation);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "동아리 모집에 참가 신청 되었습니다.");
+        return response;
+    }
+
+
     public UpdateMentoringStatusDto updateMentoringStatus(Long participationId, Participation.Status status, User user) {
-        
 
         Participation participation = participationRepository.findById(participationId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.PARTICIPATION_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PART_MENTORING_NOT_FOUND));
 
         if (!participation.getProject().getUser().getId().equals(user.getId())) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
@@ -99,5 +126,21 @@ public class ParticipationService {
         participationRepository.save(participation);
 
         return new UpdateMentoringStatusDto(participation.getStatus());
+    }
+
+    public UpdateClubStatusDto updateClubStatus(Long participationId, Participation.Status status, User user){
+
+        Participation participation = participationRepository.findById(participationId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PART_CLUB_NOT_FOUND));
+
+        if (!participation.getClub().getUser().getId().equals(user.getId())) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        participation.setStatus(status);
+        participation.setCreated_at(LocalDateTime.now());
+        participationRepository.save(participation);
+
+        return new UpdateClubStatusDto(participation.getStatus());
     }
 }
