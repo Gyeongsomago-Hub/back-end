@@ -49,7 +49,7 @@ public class UserService {
     public UserDto getUserInfo(String username) {
         User user = getUser(username);
         return new UserDto(
-                user.getId(),
+                user.getUser_id(),
                 user.getUsername(),
                 user.getName(),
                 user.getGrade(),

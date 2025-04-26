@@ -132,7 +132,7 @@ public class MentoringService {
             throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
         }
 
-        if(!project.getUser().getId().equals(user.getId())){
+        if(!project.getUser().getUser_id().equals(user.getUser_id())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
@@ -185,7 +185,7 @@ public class MentoringService {
         }
 
 
-        if (!project.getUser().getId().equals(user.getId())) {
+        if (!project.getUser().getUser_id().equals(user.getUser_id())) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 

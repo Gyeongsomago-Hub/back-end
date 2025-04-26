@@ -117,7 +117,7 @@ public class ParticipationService {
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PART_MENTORING_NOT_FOUND));
 
-        if (!participation.getProject().getUser().getId().equals(user.getId())) {
+        if (!participation.getProject().getUser().getUser_id().equals(user.getUser_id())) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
@@ -133,7 +133,7 @@ public class ParticipationService {
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PART_CLUB_NOT_FOUND));
 
-        if (!participation.getClub().getUser().getId().equals(user.getId())) {
+        if (!participation.getClub().getUser().getUser_id().equals(user.getUser_id())) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 

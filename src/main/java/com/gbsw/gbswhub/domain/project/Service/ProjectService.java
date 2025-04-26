@@ -122,7 +122,7 @@ public class ProjectService {
             throw new BusinessException(ErrorCode.PROJECT_NOT_FOUND);
         }
 
-        if(!project.getUser().getId().equals(user.getId())){
+        if(!project.getUser().getUser_id().equals(user.getUser_id())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
@@ -169,7 +169,7 @@ public class ProjectService {
             throw new BusinessException(ErrorCode.PROJECT_NOT_FOUND);
         }
 
-        if(!project.getUser().getId().equals(user.getId())){
+        if(!project.getUser().getUser_id().equals(user.getUser_id())){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 

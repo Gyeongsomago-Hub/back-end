@@ -44,7 +44,7 @@ public class TokenProvider {
                 .expiration(expiry)
                 .subject(user.getUsername())
                 .add("type", isAccessToken? "A":"R")
-                .add("id", user.getId())
+                .add("id", user.getUser_id())
                 .add("role", user.getRole().name())
                 .and()
                 .signWith(key, Jwts.SIG.HS256)
