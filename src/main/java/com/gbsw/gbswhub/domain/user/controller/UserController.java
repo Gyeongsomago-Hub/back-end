@@ -1,8 +1,9 @@
 package com.gbsw.gbswhub.domain.user.controller;
 
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
+import com.gbsw.gbswhub.domain.user.db.UpdateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UserDto;
-import com.gbsw.gbswhub.domain.user.model.User;
+import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/signup")
 
@@ -49,5 +51,20 @@ public class UserController {
     public ResponseEntity<UserDto> getUserInfo(Principal principal){
 
         return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "사용자 정보 수정", description = "사용자 정보를 수정합니다.")
+    @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id,
+                                              @Valid @RequestBody
+                                              UpdateUserDto dto,
+                                              Principal principal) {
+
+        return ResponseEntity.ok(userService.updateUser(id, principal.getName(), dto));
     }
 }

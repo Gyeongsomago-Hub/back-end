@@ -1,24 +1,24 @@
 package com.gbsw.gbswhub.domain.jwt.provider;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.crypto.SecretKey;
-
 import com.gbsw.gbswhub.domain.jwt.properties.JwtProperties;
 import com.gbsw.gbswhub.domain.user.model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+
+import javax.crypto.SecretKey;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class TokenProvider {
@@ -60,6 +60,7 @@ public class TokenProvider {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("user"));
         authorities.add(new SimpleGrantedAuthority("club_leader"));
+        authorities.add(new SimpleGrantedAuthority("admin"));
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(claims.getSubject())
