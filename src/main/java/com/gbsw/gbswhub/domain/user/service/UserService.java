@@ -3,6 +3,7 @@ package com.gbsw.gbswhub.domain.user.service;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
+import com.gbsw.gbswhub.domain.user.db.UpdateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UserDto;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
@@ -57,5 +58,36 @@ public class UserService {
                 user.getDepartment(),
                 user.getRole()
         );
+    }
+
+    public UserDto updateUser(Long userId, String username, UpdateUserDto dto) {
+
+        User user = getUser(username);
+
+        //로그인 한 사용자가 관리자인지 검사하는 로직
+        if (!user.getRole().equals(User.Role.ADMIN)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        user = userRepository.findById(userId)
+                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        user.setUsername(dto.getUsername());
+        user.setName(dto.getName());
+        user.setGrade(dto.getGrade());
+        user.setClassNumber(dto.getClassNumber());
+        user.setDepartment(dto.getDepartment());
+        user.setRole(dto.getRole());
+        userRepository.save(user);
+
+        return new UserDto(
+                user.getUser_id(),
+                user.getUsername(),
+                user.getName(),
+                user.getGrade(),
+                user.getClassNumber(),
+                user.getDepartment(),
+                user.getRole()
+                );
     }
 }
