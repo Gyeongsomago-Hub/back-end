@@ -26,11 +26,11 @@ public class Participation {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = true)
+    @JoinColumn(name = "project_id")
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id", nullable = true)
+    @JoinColumn(name = "club_id")
     private Club club;
 
     @Column

@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ai {
@@ -17,8 +18,8 @@ public class Ai {
     @Column(nullable = false)
     private String question;
 
-    @Column(nullable = false)
-    private String qnswer;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

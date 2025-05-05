@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -142,5 +144,25 @@ public class ParticipationService {
         participationRepository.save(participation);
 
         return new UpdateClubStatusDto(participation.getStatus());
+    }
+
+    public List<MyParticipationDto> getMyParticipations(User user) {
+
+        if (user == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        List<Participation> participations = participationRepository.findByUser(user);
+
+
+        return participations.stream()
+                .map(participation -> MyParticipationDto.builder()
+                        .part_id(participation.getPart_id().toString())
+                        .introduce(participation.getIntroduce())
+                        .type(participation.getType())
+                        .status(participation.getStatus())
+                        .position(participation.getPosition())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
