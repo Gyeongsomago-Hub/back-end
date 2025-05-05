@@ -5,6 +5,9 @@ import com.gbsw.gbswhub.domain.participation.service.ParticipationService;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -92,5 +96,21 @@ public class ParticipationController {
         User user = userService.getUser(principal.getName());
 
         return ResponseEntity.ok(participationService.updateClubStatus(id, dto.getStatus(), user));
+    }
+
+    @GetMapping()
+    @Operation(summary = "내 요청 조회", description = "동아리, 프로젝트, 멘토멘티 요청을 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = MyParticipationDto.class))))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<List<MyParticipationDto>> geMytParticipations(Principal principal){
+
+        User user = userService.getUser(principal.getName());
+
+        return ResponseEntity.ok(participationService.getMyParticipations(user));
     }
 }
