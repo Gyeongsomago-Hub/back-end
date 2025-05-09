@@ -56,7 +56,7 @@ public class ClubService {
                 .map(club -> {
 
                     return new ClubDto(
-                            club.getClub_id(),
+                            club.getId(),
                             club.getName(),
                             club.getDescription(),
                             club.getLocation(),
@@ -74,7 +74,7 @@ public class ClubService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
 
         return new ClubDto(
-                club.getClub_id(),
+                club.getId(),
                 club.getName(),
                 club.getDescription(),
                 club.getLocation(),
@@ -107,7 +107,7 @@ public class ClubService {
         clubRepository.save(club);
 
         return new ClubDto(
-                club.getClub_id(),
+                club.getId(),
                 club.getName(),
                 club.getDescription(),
                 club.getLocation(),

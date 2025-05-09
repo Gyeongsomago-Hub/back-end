@@ -5,6 +5,13 @@ import com.gbsw.gbswhub.domain.club.repository.ClubRepository;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.participation.db.*;
+import com.gbsw.gbswhub.domain.participation.db.club.RequestClubDto;
+import com.gbsw.gbswhub.domain.participation.db.club.ResponseClubDto;
+import com.gbsw.gbswhub.domain.participation.db.club.UpdateClubStatusDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.RequestMentoringDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.UpdateMentoringStatusDto;
+import com.gbsw.gbswhub.domain.participation.db.project.RequestProjectDto;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
@@ -67,6 +74,12 @@ public class ParticipationService {
             throw new BusinessException(ErrorCode.MENTORING_NOT_FOUND);
         }
 
+        boolean alreadyRequested = participationRepository.existsByUserAndProject(user, project);
+
+        if(alreadyRequested) {
+            throw new BusinessException(ErrorCode.ALREADY_PARTICIPATED);
+        }
+
         Participation participation = Participation.builder()
                 .position(dto.getPosition())
                 .introduce(dto.getIntroduce())
@@ -94,6 +107,11 @@ public class ParticipationService {
         Club club = clubRepository.findById(dto.getClubId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
 
+        boolean alreadyRequested = participationRepository.existsByUserAndClub(user, club);
+
+        if(alreadyRequested){
+            throw new BusinessException(ErrorCode.ALREADY_PARTICIPATED);
+        }
 
         Participation participation = Participation.builder()
                 .introduce(dto.getIntroduce())
@@ -162,6 +180,72 @@ public class ParticipationService {
                         .type(participation.getType())
                         .status(participation.getStatus())
                         .position(participation.getPosition())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    public void deleteParticipation(Long id, User user) {
+
+        if(user == null){
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Participation participation = participationRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PART_NOT_FOUND));
+
+        if (!participation.canBeDeletedBy(user)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+        participationRepository.delete(participation);
+    }
+
+    public List<ResponseClubDto> getRequestByClub(User user, Long clubId) {
+
+        Club club = clubRepository.findById(clubId).orElseThrow(()-> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
+
+        if(!club.isLeader(user)){
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        List<Participation> participations = participationRepository.findAllByClub_Id(clubId);
+
+        return participations.stream()
+                .map(participation -> ResponseClubDto.builder()
+                        .id(participation.getPart_id())
+                        .introduce(participation.getIntroduce())
+                        .name(participation.getName())
+                        .grade(participation.getGrade())
+                        .classNo(participation.getClassNo())
+                        .studentNo(participation.getStudentNo())
+                        .clubId(participation.getClub().getId())
+                        .type(participation.getType())
+                        .status(participation.getStatus())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<ResponseMentoringDto> getRequestByMentoring(User user, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
+
+        if(!project.isOwner(user)){
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        List<Participation> participations = participationRepository.findAllByProject_Id(projectId);
+
+        return participations.stream()
+                .map(participation -> ResponseMentoringDto.builder()
+                        .id(participation.getPart_id())
+                        .introduce(participation.getIntroduce())
+                        .grade(participation.getGrade())
+                        .position(participation.getPosition())
+                        .classNo(participation.getClassNo())
+                        .studentNo(participation.getStudentNo())
+                        .name(participation.getName())
+                        .type(participation.getType())
+                        .status(participation.getStatus())
                         .build())
                 .collect(Collectors.toList());
     }

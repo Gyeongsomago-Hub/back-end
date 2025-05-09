@@ -61,6 +61,7 @@ public class TokenProvider {
         authorities.add(new SimpleGrantedAuthority("user"));
         authorities.add(new SimpleGrantedAuthority("club_leader"));
         authorities.add(new SimpleGrantedAuthority("admin"));
+        authorities.add(new SimpleGrantedAuthority("mentor"));
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(claims.getSubject())

@@ -43,6 +43,7 @@ public class SwaggerConfig {
                 .addResponses("RequestClub200", createErrorResponse("동아리 모집에 참가 신청 되었습니다.", 200))
                 .addResponses("Club200", createErrorResponse("동아리 모집 공고가 생성되었습니다.", 200))
                 .addResponses("Ai200", createErrorResponse("ai 응답이 생성되었습니다.", 200))
+                .addResponses("RequestDelete200", createErrorResponse("삭제 요청이 생성되었습니다", 200))
                 .addResponses("400", createErrorResponse("잘못된 입력값입니다.", 400))
                 .addResponses("401", createErrorResponse("비밀번호가 일치하지 않습니다.", 401))
                 .addResponses("403", createErrorResponse("접근 권한이 없습니다.", 403))

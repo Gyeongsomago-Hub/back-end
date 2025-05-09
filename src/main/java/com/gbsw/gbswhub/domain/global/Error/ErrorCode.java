@@ -23,6 +23,8 @@ public enum ErrorCode {
 
     PART_CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "동아리 신청을 찾을 수 없습니다."),
 
+    PART_NOT_FOUND(HttpStatus.NOT_FOUND, "신청을 찾을 수 없습니다."),
+
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
 
     INVALID_REQUEST(HttpStatus.UNAUTHORIZED, "유효하지 않은 요청입니다."),
@@ -33,7 +35,9 @@ public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
 
-    USERNAME_DUPLICATION(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다");
+    USERNAME_DUPLICATION(HttpStatus.CONFLICT, "이미 사용 중인 아이디입니다."),
+
+    ALREADY_PARTICIPATED(HttpStatus.CONFLICT, "이미 신청한 모집글입니다.");
 
     private final HttpStatus status;
     private final String message;

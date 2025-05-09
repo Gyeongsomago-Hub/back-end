@@ -31,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private String classNumber; //반
 
+    @Column
+    private String studentNumber;
+
     @Column(nullable = false)
     private String department; //과
 
@@ -41,6 +44,6 @@ public class User {
     public enum Role {
         USER,
         ADMIN,
-        CLUB_LEADER
+        CLUB_LEADER,
     }
 }
