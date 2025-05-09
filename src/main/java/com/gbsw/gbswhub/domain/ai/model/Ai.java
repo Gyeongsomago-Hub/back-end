@@ -13,7 +13,7 @@ import lombok.*;
 public class Ai {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ai_id;
+    private Long id;
 
     @Column(nullable = false)
     private String question;

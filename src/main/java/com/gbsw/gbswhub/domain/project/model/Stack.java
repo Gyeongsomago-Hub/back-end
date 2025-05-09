@@ -13,7 +13,7 @@ public class Stack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long stack_id;
+    private Long id;
 
     @Column(nullable = false)
     private String stack_name;

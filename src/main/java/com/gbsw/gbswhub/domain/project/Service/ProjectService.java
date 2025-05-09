@@ -70,7 +70,7 @@ public class ProjectService {
                             .collect(Collectors.toList());
 
                     return new ProjectDto(
-                            project.getProject_id(),
+                            project.getId(),
                             project.getTitle(),
                             project.getContent(),
                             project.getPeople(),
@@ -97,7 +97,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
 
         return new ProjectDto(
-                project.getProject_id(),
+                project.getId(),
                 project.getTitle(),
                 project.getContent(),
                 project.getPeople(),
@@ -144,7 +144,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
 
         return new ProjectDto(
-                project.getProject_id(),
+                project.getId(),
                 project.getTitle(),
                 project.getContent(),
                 project.getPeople(),

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long club_id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -41,4 +41,8 @@ public class Club {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public boolean isLeader(User user) {
+        return this.user != null && this.user.equals(user);
+    }
 }

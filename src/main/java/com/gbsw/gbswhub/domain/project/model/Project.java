@@ -20,7 +20,7 @@ import java.util.List;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long project_id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -71,6 +71,10 @@ public class Project {
     public enum Type {
         PROJECT,
         MENTORING
+    }
+
+    public boolean isOwner(User user) {
+        return this.user != null && this.user.getUser_id().equals(user.getUser_id());
     }
 }
 

@@ -1,6 +1,13 @@
 package com.gbsw.gbswhub.domain.participation.controller;
 
 import com.gbsw.gbswhub.domain.participation.db.*;
+import com.gbsw.gbswhub.domain.participation.db.club.RequestClubDto;
+import com.gbsw.gbswhub.domain.participation.db.club.ResponseClubDto;
+import com.gbsw.gbswhub.domain.participation.db.club.UpdateClubStatusDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.RequestMentoringDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
+import com.gbsw.gbswhub.domain.participation.db.mentoring.UpdateMentoringStatusDto;
+import com.gbsw.gbswhub.domain.participation.db.project.RequestProjectDto;
 import com.gbsw.gbswhub.domain.participation.service.ParticipationService;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -112,5 +119,52 @@ public class ParticipationController {
         User user = userService.getUser(principal.getName());
 
         return ResponseEntity.ok(participationService.getMyParticipations(user));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "참가 요청 삭제", description = ".")
+    @ApiResponse(responseCode = "204", ref = "#/components/responses/204")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<Void> deleteParticipation(@PathVariable Long id, Principal principal) {
+        User user = userService.getUser(principal.getName());
+
+        participationService.deleteParticipation(id, user);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/club{id}")
+    @Operation(summary = "특정 동아리 신청 내역 조회", description = "동아리장이 자신의 동아리의 신청 내역을 모두 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ResponseClubDto.class))))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<List<ResponseClubDto>> getAllClubById(@PathVariable Long id, Principal principal){
+        User user = userService.getUser(principal.getName());
+
+        List<ResponseClubDto> dtoList = participationService.getRequestByClub(user, id);
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping("/mentoring/{id}")
+    @Operation(summary = "특정 멘토멘티 신청 내역 조회", description = "멘토가 자신의 멘토링 신청 내역을 모두 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ResponseClubDto.class))))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<List<ResponseMentoringDto>> getAllMentoringById(@PathVariable Long id, Principal principal) {
+        User user = userService.getUser(principal.getName());
+
+        List<ResponseMentoringDto> dtoList = participationService.getRequestByMentoring(user, id);
+
+        return ResponseEntity.ok(dtoList);
     }
 }

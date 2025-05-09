@@ -72,7 +72,7 @@ public class MentoringService {
                             .collect(Collectors.toList());
 
                     return new MentoringDto(
-                            project.getProject_id(),
+                            project.getId(),
                             project.getTitle(),
                             project.getContent(),
                             project.getPeople(),
@@ -106,7 +106,7 @@ public class MentoringService {
                 .collect(Collectors.toList());
 
         return new MentoringDto(
-                project.getProject_id(),
+                project.getId(),
                 project.getTitle(),
                 project.getContent(),
                 project.getPeople(),
@@ -158,7 +158,7 @@ public class MentoringService {
                 .collect(Collectors.toList());
 
         return new MentoringDto(
-                project.getProject_id(),
+                project.getId(),
                 project.getTitle(),
                 project.getContent(),
                 project.getPeople(),

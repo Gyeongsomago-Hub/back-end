@@ -71,6 +71,15 @@ public class Participation {
     public enum Status {
         REQUESTED,
         APPROVED,
-        REJECTED,
+    }
+
+    public boolean canBeDeletedBy(User user) {
+        if (this.project != null) {
+            return this.project.isOwner(user);
+        }
+        if (this.club != null) {
+            return this.club.isLeader(user);
+        }
+        return false;
     }
 }

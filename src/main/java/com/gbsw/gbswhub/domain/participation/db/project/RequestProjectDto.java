@@ -1,4 +1,4 @@
-package com.gbsw.gbswhub.domain.participation.db;
+package com.gbsw.gbswhub.domain.participation.db.project;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +23,6 @@ public class RequestProjectDto {
 
     private Participation.Type type = Participation.Type.PROJECT;
 
-    @Schema(example = "REQUESTED")
+    @Schema(example = "APPROVED")
     private Participation.Status status = Participation.Status.APPROVED;
 }
