@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
+
 @Service
 @RequiredArgsConstructor
 public class ParticipationService {
@@ -35,10 +37,7 @@ public class ParticipationService {
 
     public Map<String, String> RequestProject(RequestProjectDto dto, User user) {
 
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
-
+        validateUser(user);
 
         Project project = projectRepository.findById(dto.getProjectId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
@@ -63,10 +62,7 @@ public class ParticipationService {
     }
 
     public Map<String, String> RequestMentoring(RequestMentoringDto dto, User user) {
-
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = projectRepository.findById(dto.getProjectId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
@@ -101,9 +97,7 @@ public class ParticipationService {
     }
 
     public Map<String, String> requestClub(RequestClubDto dto, User user){
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Club club = clubRepository.findById(dto.getClubId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
@@ -167,10 +161,7 @@ public class ParticipationService {
 
     @Transactional(readOnly = true)
     public List<MyParticipationDto> getMyParticipations(User user) {
-
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         List<Participation> participations = participationRepository.findByUser(user);
 
@@ -189,9 +180,7 @@ public class ParticipationService {
 
     public void deleteParticipation(Long id, User user) {
 
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Participation participation = participationRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PART_NOT_FOUND));

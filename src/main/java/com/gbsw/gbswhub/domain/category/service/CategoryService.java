@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -23,9 +25,7 @@ public class CategoryService {
 
     public Map<String, String> createCategory (CreateCategoryDto dto, User user) {
 
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Category category = Category.builder()
                 .category_name(dto.getCategory_name())

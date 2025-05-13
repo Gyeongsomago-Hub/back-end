@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
+
 @Service
 @RequiredArgsConstructor
 public class ClubService {
@@ -25,9 +27,7 @@ public class ClubService {
 
     public Map<String, String> createClub(CreateClubDto dto, User user) {
 
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         if(!user.getRole().equals(User.Role.CLUB_LEADER)){
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
@@ -89,9 +89,7 @@ public class ClubService {
     }
 
     public ClubDto updateClub(Long ClubId, UpdateClubDto dto, User user){
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Club club = clubRepository.findById(ClubId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));
@@ -122,9 +120,7 @@ public class ClubService {
     }
 
     public void deleteClub(Long id, User user){
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Club club = clubRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));

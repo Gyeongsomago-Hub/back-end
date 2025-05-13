@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
+
 @Service
 @RequiredArgsConstructor
 public class ChatGptService {
@@ -69,9 +71,7 @@ public class ChatGptService {
     }
 
     public ResponseEntity<Map<String, String>> generateRoadmap(RequestRoadMapDto dto, User user) {
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         String prompt = generatePrompt(dto);
 
