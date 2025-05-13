@@ -10,6 +10,7 @@ import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +43,13 @@ public class UserService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public User getUser(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public UserDto getUserInfo(String username) {
         User user = getUser(username);
         return new UserDto(

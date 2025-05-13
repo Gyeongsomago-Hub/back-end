@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-    INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다."),
 
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
@@ -26,8 +25,6 @@ public enum ErrorCode {
     PART_NOT_FOUND(HttpStatus.NOT_FOUND, "신청을 찾을 수 없습니다."),
 
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-
-    INVALID_REQUEST(HttpStatus.UNAUTHORIZED, "유효하지 않은 요청입니다."),
 
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰 기한이 만료되었습니다."),
 

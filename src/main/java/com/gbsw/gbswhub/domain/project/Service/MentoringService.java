@@ -12,9 +12,9 @@ import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -41,6 +41,11 @@ public class MentoringService {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
 
+
+        if (user.getRole() != User.Role.MENTOR) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
         Project project = Project.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -63,6 +68,7 @@ public class MentoringService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<MentoringDto> getAllMentoring() {
         List<Project> projects = projectRepository.findByType(MENTORING);
         return projects.stream()

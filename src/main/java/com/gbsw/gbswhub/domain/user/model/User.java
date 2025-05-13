@@ -45,5 +45,6 @@ public class User {
         USER,
         ADMIN,
         CLUB_LEADER,
+        MENTOR
     }
 }

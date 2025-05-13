@@ -10,6 +10,7 @@ import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ClubService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<ClubDto> getAllClub() {
         List<Club> clubs = clubRepository.findAll();
 
@@ -69,6 +71,7 @@ public class ClubService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public ClubDto getClubById(Long id){
         Club club = clubRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CLUB_NOT_FOUND));

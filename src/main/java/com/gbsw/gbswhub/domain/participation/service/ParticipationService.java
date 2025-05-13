@@ -18,6 +18,7 @@ import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -164,6 +165,7 @@ public class ParticipationService {
         return new UpdateClubStatusDto(participation.getStatus());
     }
 
+    @Transactional(readOnly = true)
     public List<MyParticipationDto> getMyParticipations(User user) {
 
         if (user == null) {
