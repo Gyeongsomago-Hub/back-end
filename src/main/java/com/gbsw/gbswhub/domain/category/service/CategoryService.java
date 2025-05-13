@@ -9,6 +9,7 @@ import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ public class CategoryService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryDto> getAllCategory(){
         return categoryRepository.findAll()
                 .stream()
@@ -43,6 +45,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CategoryDto getCategoryById(Long id){
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));

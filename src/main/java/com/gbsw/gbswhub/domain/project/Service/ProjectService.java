@@ -10,9 +10,9 @@ import com.gbsw.gbswhub.domain.project.model.Stack;
 import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -60,6 +60,7 @@ public class ProjectService {
         return response;
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectDto> getAllProject() {
         List<Project> projects = projectRepository.findByType(PROJECT);
 
@@ -84,7 +85,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ProjectDto getProjectById(Long id) {
         projectRepository.incrementViewCount(id);
 
