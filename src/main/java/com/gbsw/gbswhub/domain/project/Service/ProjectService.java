@@ -1,15 +1,11 @@
 package com.gbsw.gbswhub.domain.project.Service;
 
-import com.gbsw.gbswhub.domain.category.db.CategoryRepository;
 import com.gbsw.gbswhub.domain.global.Error.ErrorCode;
 import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
-import com.gbsw.gbswhub.domain.jwt.provider.TokenProvider;
 import com.gbsw.gbswhub.domain.project.db.*;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
-import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
-import com.gbsw.gbswhub.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,23 +16,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
 import static com.gbsw.gbswhub.domain.project.model.Project.Type.PROJECT;
-import static com.gbsw.gbswhub.domain.project.util.StackConverter.convertToStacks;
+import static com.gbsw.gbswhub.domain.global.util.StackConverter.convertToStacks;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final UserRepository userRepository;
-    private final TokenProvider tokenProvider;
-    private final UserService userService;
-    private final CategoryRepository categoryRepository;
-
 
     public Map<String, String> createProject(CreateProjectDto dto, User user) {
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = Project.builder()
                 .title(dto.getTitle())
@@ -112,9 +102,7 @@ public class ProjectService {
 
     public ProjectDto UpdateProject(Long projectId, UpdateProjectDto dto, User user) {
 
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
@@ -159,9 +147,7 @@ public class ProjectService {
 
     public void deleteProject(Long id, User user){
 
-        if(user==null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = projectRepository.findById(id)
                         .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));

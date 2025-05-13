@@ -10,7 +10,6 @@ import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.mentoring.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
-import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,21 +21,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
 import static com.gbsw.gbswhub.domain.project.model.Project.Type.MENTORING;
-import static com.gbsw.gbswhub.domain.project.util.StackConverter.convertToStacks;
+import static com.gbsw.gbswhub.domain.global.util.StackConverter.convertToStacks;
 
 @Service
 @RequiredArgsConstructor
 public class MentoringService {
     private final ProjectRepository projectRepository;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
 
     public Map<String, String> createMentoring(CreateMentoringDto dto, User user) {
 
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
@@ -127,9 +124,7 @@ public class MentoringService {
 
     public MentoringDto updateMentoring(Long mentoringId, UpdateMentoringDto dto, User user) {
 
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = projectRepository.findById(mentoringId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
@@ -179,9 +174,7 @@ public class MentoringService {
 
     public void deleteMentoring(Long  id, User user){
 
-        if(user == null){
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));

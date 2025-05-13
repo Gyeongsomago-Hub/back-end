@@ -20,6 +20,8 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gbsw.gbswhub.domain.global.util.UserValidator.validateUser;
+
 @RequiredArgsConstructor
 @Service
 public class TokenService {
@@ -32,9 +34,7 @@ public class TokenService {
     public Map<String, String> getAccessToken(AccessTokenRequest request) {
         User user = userService.getUser(request.getUsername());
 
-        if (user == null) {
-            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
-        }
+        validateUser(user);
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);

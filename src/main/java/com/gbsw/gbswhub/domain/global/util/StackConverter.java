@@ -1,4 +1,4 @@
-package com.gbsw.gbswhub.domain.project.util;
+package com.gbsw.gbswhub.domain.global.util;
 
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
