@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -92,5 +94,39 @@ public class UserService {
                 user.getDepartment(),
                 user.getRole()
                 );
+    }
+
+    public List<UserDto> getAllUsers(String username){
+        User user = getUser(username);
+
+        if (!user.getRole().equals(User.Role.ADMIN)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        return userRepository.findAll()
+                .stream()
+                .map(u -> new UserDto(
+                        u.getUser_id(),
+                        u.getUsername(),
+                        u.getName(),
+                        u.getGrade(),
+                        u.getClassNumber(),
+                        u.getDepartment(),
+                        u.getRole()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public void deleteUser(Long userId, String username) {
+        User user = getUser(username);
+
+        if(!user.getRole().equals(User.Role.ADMIN)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        userRepository.delete(user);
     }
 }

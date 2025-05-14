@@ -3,7 +3,6 @@ package com.gbsw.gbswhub.domain.user.controller;
 import com.gbsw.gbswhub.domain.user.db.CreateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UpdateUserDto;
 import com.gbsw.gbswhub.domain.user.db.UserDto;
-import com.gbsw.gbswhub.domain.user.db.UserRepository;
 import com.gbsw.gbswhub.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,7 +28,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-
     @Operation(summary = "회원가입", description = "새로운 사용자를 생성합니다.")
     @ApiResponse(responseCode = "200", ref = "#/components/responses/200")
     @ApiResponse(responseCode = "400", ref = "#/components/responses/400")
@@ -65,5 +64,33 @@ public class UserController {
                                               Principal principal) {
 
         return ResponseEntity.ok(userService.updateUser(id, principal.getName(), dto));
+    }
+
+    @GetMapping()
+    @Operation(summary = "사용자 전체조회", description = "관리자가 사용자를 전체 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "사용자 목록 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<List<UserDto>> getAllUsers(Principal principal) {
+
+        return ResponseEntity.ok(userService.getAllUsers(principal.getName()));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "사용자 삭제", description = "관리자가 사용자를 삭제합니다.")
+    @ApiResponse(responseCode = "204", description = "사용자 삭제 성공")
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Principal principal) {
+
+        userService.deleteUser(id, principal.getName());
+
+        return ResponseEntity.ok().build();
     }
 }
