@@ -7,18 +7,19 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ai {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ai_id;
+    private Long id;
 
     @Column(nullable = false)
     private String question;
 
-    @Column(nullable = false)
-    private String qnswer;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
