@@ -53,4 +53,3 @@ jobs:
             sudo docker stop prod-container || true
             sudo docker rm prod-container || true
             sudo docker run -d --name prod-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
-            sudo docker image prune -f
