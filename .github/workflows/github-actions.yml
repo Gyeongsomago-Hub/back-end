@@ -6,7 +6,8 @@ on:
       - master
 
 env:
-  PROJECT_NAME: action_codedeploy
+  PROJECT_NAME: action-gbsw-hub
+  IMAGE_NAME: soccerfriend
 
 jobs:
   deploy:
@@ -28,3 +29,28 @@ jobs:
 
       - name: Build with Gradle (skip tests)
         run: ./gradlew build -x test --no-daemon
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }} .
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+            sudo docker stop prod-container || true
+            sudo docker rm prod-container || true
+            sudo docker run -d --name prod-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+            sudo docker image prune -f
