@@ -61,4 +61,5 @@ jobs:
 
             sudo docker run -d --name prod-container -p 8080:8080 \
               -v ~/application.properties:/app/config/application.properties \
-              ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+              ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }} \
+              --spring.config.location=file:/app/config/application.properties
