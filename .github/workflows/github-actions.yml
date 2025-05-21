@@ -55,4 +55,11 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
             sudo docker stop prod-container || true
             sudo docker rm prod-container || true
-            sudo docker run -d --name prod-container -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+
+            # application.properties 생성 (HOME 디렉토리에)
+            echo "${{ secrets.APPLICATION_PROPERTIES }}" > ~/application.properties
+
+            # 도커 컨테이너 실행, properties 파일 마운트
+            sudo docker run -d --name prod-container -p 8080:8080 \
+              -v ~/application.properties:/app/config/application.properties \
+              ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
