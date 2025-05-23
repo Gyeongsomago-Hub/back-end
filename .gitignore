@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 application-local.properties
+.env
 .idea
 *.iws
 *.iml

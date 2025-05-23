@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  backend-server:
+    image: suhwan4763/soccerfriend:latest
+    container_name: gbswhub-backend-server
+    ports:
+      - "8060:8060"
+    environment:
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${USER_NAME}
+      - SPRING_DATASOURCE_PASSWORD=${USER_PASSWORD}
+      - SPRING_AI_OPENAI_API_KEY=${SPRING_AI_OPENAI_API_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    networks:
+      - my-app-network
+    restart: unless-stopped
+    volumes:
+      - /home/ec2-user/back-end/images:/app/images
+      - /home/ec2-user/back-end/logs:/app/logs
+
+networks:
+  my-app-network:
+    driver: bridge
