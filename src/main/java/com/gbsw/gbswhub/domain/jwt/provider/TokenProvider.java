@@ -1,12 +1,11 @@
 package com.gbsw.gbswhub.domain.jwt.provider;
 
-import com.gbsw.gbswhub.domain.jwt.properties.JwtProperties;
-import com.gbsw.gbswhub.domain.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,28 +21,32 @@ import java.util.List;
 
 @Service
 public class TokenProvider {
-    private final JwtProperties jwtProperties;
+
+    private final String issuer;
     private final SecretKey key;
     private final io.jsonwebtoken.JwtParser parser;
 
-    public TokenProvider(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-        key = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtProperties.getSecretKey()));
-        parser = Jwts.parser().verifyWith(key).build();
+    public TokenProvider(
+            @Value("${jwt.secret-key}") String secretKey,
+            @Value("${jwt.issuer}") String issuer
+    ) {
+        this.issuer = issuer;
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(secretKey));
+        this.parser = Jwts.parser().verifyWith(key).build();
     }
 
-    public String generateToken(User user, Duration expiredAt, boolean isAccessToken) {
+    public String generateToken(com.gbsw.gbswhub.domain.user.model.User user, Duration expiredAt, boolean isAccessToken) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expiredAt.toMillis());
 
         return Jwts.builder()
                 .header().add("type", "JWT").add("alg", "HS256").and()
                 .claims()
-                .issuer(jwtProperties.getIssuer())
+                .issuer(issuer)
                 .issuedAt(now)
                 .expiration(expiry)
                 .subject(user.getUsername())
-                .add("type", isAccessToken? "A":"R")
+                .add("type", isAccessToken ? "A" : "R")
                 .add("id", user.getUser_id())
                 .add("role", user.getRole().name())
                 .and()
@@ -55,7 +58,7 @@ public class TokenProvider {
         Claims claims = getClaims(token);
 
         String type = claims.get("type").toString();
-        if(type == null || !claims.get("type").equals("A")) throw new IllegalArgumentException("");
+        if (type == null || !type.equals("A")) throw new IllegalArgumentException("");
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("user"));
@@ -65,14 +68,14 @@ public class TokenProvider {
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User
                 .withUsername(claims.getSubject())
-                .password("") // 비밀번호 불필요
+                .password("")
                 .authorities(authorities)
                 .build();
 
         return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
     }
 
-    public Claims getClaims(String token){
+    public Claims getClaims(String token) {
         Jws<Claims> jws = parser.parseSignedClaims(token);
         return jws.getPayload();
     }
