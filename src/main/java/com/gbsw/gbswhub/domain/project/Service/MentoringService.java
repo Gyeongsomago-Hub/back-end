@@ -7,6 +7,7 @@ import com.gbsw.gbswhub.domain.global.Exception.BusinessException;
 import com.gbsw.gbswhub.domain.project.mentoring.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.mentoring.db.MentoringDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
+import com.gbsw.gbswhub.domain.project.mentoring.db.MentoringResponseDto;
 import com.gbsw.gbswhub.domain.project.mentoring.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.project.model.Project;
 import com.gbsw.gbswhub.domain.project.model.Stack;
@@ -84,7 +85,9 @@ public class MentoringService {
                             project.getOpenDate(),
                             project.getCloseDate(),
                             project.getStatus(),
-                            project.getCategory().getCategory_id()
+                            project.getCategory().getCategory_id(),
+                            project.getUser().getUser_id(),
+                            project.getUser().getName()
                     );
                 })
                 .collect(Collectors.toList());
@@ -118,11 +121,13 @@ public class MentoringService {
                 project.getOpenDate(),
                 project.getCloseDate(),
                 project.getStatus(),
-                project.getCategory().getCategory_id()
+                project.getCategory().getCategory_id(),
+                project.getUser().getUser_id(),
+                project.getUser().getName()
         );
     }
 
-    public MentoringDto updateMentoring(Long mentoringId, UpdateMentoringDto dto, User user) {
+    public MentoringResponseDto updateMentoring(Long mentoringId, UpdateMentoringDto dto, User user) {
 
         validateUser(user);
 
@@ -158,7 +163,7 @@ public class MentoringService {
                 .map(Stack::getStack_name)
                 .collect(Collectors.toList());
 
-        return new MentoringDto(
+        return new MentoringResponseDto(
                 project.getId(),
                 project.getTitle(),
                 project.getContent(),
@@ -168,7 +173,8 @@ public class MentoringService {
                 project.getOpenDate(),
                 project.getCloseDate(),
                 project.getStatus(),
-                project.getCategory().getCategory_id()
+                project.getCategory().getCategory_id(),
+                project.getUser().getUser_id()
         );
     }
 

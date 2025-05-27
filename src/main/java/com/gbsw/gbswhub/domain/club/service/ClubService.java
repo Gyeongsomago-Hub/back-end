@@ -1,6 +1,7 @@
 package com.gbsw.gbswhub.domain.club.service;
 
 import com.gbsw.gbswhub.domain.club.db.ClubDto;
+import com.gbsw.gbswhub.domain.club.db.ClubResponseDto;
 import com.gbsw.gbswhub.domain.club.db.CreateClubDto;
 import com.gbsw.gbswhub.domain.club.db.UpdateClubDto;
 import com.gbsw.gbswhub.domain.club.model.Club;
@@ -65,7 +66,9 @@ public class ClubService {
                             club.getTarget(),
                             club.getType(),
                             club.getOpenDate(),
-                            club.getCloseDate()
+                            club.getCloseDate(),
+                            club.getUser().getUser_id(),
+                            club.getUser().getName()
                     );
                 })
                 .collect(Collectors.toList());
@@ -84,11 +87,13 @@ public class ClubService {
                 club.getTarget(),
                 club.getType(),
                 club.getOpenDate(),
-                club.getCloseDate()
+                club.getCloseDate(),
+                club.getUser().getUser_id(),
+                club.getUser().getName()
         );
     }
 
-    public ClubDto updateClub(Long ClubId, UpdateClubDto dto, User user){
+    public ClubResponseDto updateClub(Long ClubId, UpdateClubDto dto, User user){
         validateUser(user);
 
         Club club = clubRepository.findById(ClubId)
@@ -107,7 +112,7 @@ public class ClubService {
         club.setCloseDate(dto.getCloseDate());
         clubRepository.save(club);
 
-        return new ClubDto(
+        return new ClubResponseDto(
                 club.getId(),
                 club.getName(),
                 club.getDescription(),
@@ -115,7 +120,8 @@ public class ClubService {
                 club.getTarget(),
                 club.getType(),
                 club.getOpenDate(),
-                club.getCloseDate()
+                club.getCloseDate(),
+                club.getUser().getUser_id()
         );
     }
 

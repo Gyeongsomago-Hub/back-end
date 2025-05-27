@@ -4,6 +4,7 @@ package com.gbsw.gbswhub.domain.project.controller;
 import com.gbsw.gbswhub.domain.project.Service.ProjectService;
 import com.gbsw.gbswhub.domain.project.db.CreateProjectDto;
 import com.gbsw.gbswhub.domain.project.db.ProjectDto;
+import com.gbsw.gbswhub.domain.project.db.ProjectResponseDto;
 import com.gbsw.gbswhub.domain.project.db.UpdateProjectDto;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -82,14 +83,14 @@ public class ProjectController {
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/Project404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
-    public ResponseEntity<ProjectDto> updateProject(
+    public ResponseEntity<ProjectResponseDto> updateProject(
             @PathVariable Long id,
             @Valid @RequestBody UpdateProjectDto dto,
             Principal principal){
 
         User user = userService.getUser(principal.getName());
 
-        ProjectDto project = projectService.UpdateProject(id, dto, user);
+        ProjectResponseDto project = projectService.UpdateProject(id, dto, user);
         return ResponseEntity.ok(project);
     }
 

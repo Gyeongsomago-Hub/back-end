@@ -3,6 +3,7 @@ package com.gbsw.gbswhub.domain.project.mentoring.controller;
 import com.gbsw.gbswhub.domain.project.Service.MentoringService;
 import com.gbsw.gbswhub.domain.project.mentoring.db.CreateMentoringDto;
 import com.gbsw.gbswhub.domain.project.mentoring.db.MentoringDto;
+import com.gbsw.gbswhub.domain.project.mentoring.db.MentoringResponseDto;
 import com.gbsw.gbswhub.domain.project.mentoring.db.UpdateMentoringDto;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -78,14 +79,14 @@ public class MentoringController {
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/Mentoring404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
-    public ResponseEntity<MentoringDto> updateMentoring(
+    public ResponseEntity<MentoringResponseDto> updateMentoring(
             @PathVariable Long id,
             @Valid @RequestBody  UpdateMentoringDto dto,
             Principal principal) {
 
         User user = userService.getUser(principal.getName());
 
-        MentoringDto mentoring = mentoringService.updateMentoring(id, dto, user);
+        MentoringResponseDto mentoring = mentoringService.updateMentoring(id, dto, user);
 
         return ResponseEntity.ok(mentoring);
     }
