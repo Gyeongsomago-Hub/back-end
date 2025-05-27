@@ -75,7 +75,7 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ProjectDto getProjectById(Long id) {
         projectRepository.incrementViewCount(id);
 
