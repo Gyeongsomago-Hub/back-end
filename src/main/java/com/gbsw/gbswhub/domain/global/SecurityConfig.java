@@ -46,7 +46,13 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/auth/login/**"),
                                 new AntPathRequestMatcher("/api/user/signup"),
                                 new AntPathRequestMatcher("/swagger-ui/**"),
-                                new AntPathRequestMatcher("/v3/api-docs/**")
+                                new AntPathRequestMatcher("/v3/api-docs/**"),
+                                new AntPathRequestMatcher("/api/mentoring", "GET"),
+                                new AntPathRequestMatcher("/api/mentoring/*", "GET"),
+                                new AntPathRequestMatcher("/api/project", "GET"),
+                                new AntPathRequestMatcher("/api/project/*", "GET"),
+                                new AntPathRequestMatcher("/api/club", "GET"),
+                                new AntPathRequestMatcher("/api/club/*", "GET")
                         )
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/category", "/api/category/*").permitAll()
