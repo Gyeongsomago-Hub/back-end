@@ -69,13 +69,15 @@ public class ProjectService {
                             stack,
                             project.getOpenDate(),
                             project.getCloseDate(),
-                            project.getStatus()
+                            project.getStatus(),
+                            project.getUser().getUser_id(),
+                            project.getUser().getName()
                     );
                 })
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ProjectDto getProjectById(Long id) {
         projectRepository.incrementViewCount(id);
 
@@ -96,11 +98,13 @@ public class ProjectService {
                 stack,
                 project.getOpenDate(),
                 project.getCloseDate(),
-                project.getStatus()
+                project.getStatus(),
+                project.getUser().getUser_id(),
+                project.getUser().getName()
         );
     }
 
-    public ProjectDto UpdateProject(Long projectId, UpdateProjectDto dto, User user) {
+    public ProjectResponseDto UpdateProject(Long projectId, UpdateProjectDto dto, User user) {
 
         validateUser(user);
 
@@ -132,7 +136,7 @@ public class ProjectService {
                 .map(Stack::getStack_name)
                 .collect(Collectors.toList());
 
-        return new ProjectDto(
+        return new ProjectResponseDto(
                 project.getId(),
                 project.getTitle(),
                 project.getContent(),
@@ -141,7 +145,8 @@ public class ProjectService {
                 stack,
                 project.getOpenDate(),
                 project.getCloseDate(),
-                project.getStatus()
+                project.getStatus(),
+                project.getUser().getUser_id()
         );
     }
 

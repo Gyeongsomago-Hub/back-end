@@ -159,6 +159,7 @@ public class ParticipationService {
         return new UpdateClubStatusDto(participation.getStatus());
     }
 
+    // 나의 신청목록 조회
     @Transactional(readOnly = true)
     public List<MyParticipationDto> getMyParticipations(User user) {
         validateUser(user);

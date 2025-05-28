@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.club.controller;
 
 
 import com.gbsw.gbswhub.domain.club.db.ClubDto;
+import com.gbsw.gbswhub.domain.club.db.ClubResponseDto;
 import com.gbsw.gbswhub.domain.club.db.CreateClubDto;
 import com.gbsw.gbswhub.domain.club.db.UpdateClubDto;
 import com.gbsw.gbswhub.domain.club.service.ClubService;
@@ -80,7 +81,7 @@ public class ClubController {
     @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/Club404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
-    public ResponseEntity<ClubDto> updateClub(@PathVariable Long id, @Valid @RequestBody UpdateClubDto dto, Principal principal) {
+    public ResponseEntity<ClubResponseDto> updateClub(@PathVariable Long id, @Valid @RequestBody UpdateClubDto dto, Principal principal) {
         User user = userService.getUser(principal.getName());
 
         return ResponseEntity.ok(clubService.updateClub(id, dto, user));

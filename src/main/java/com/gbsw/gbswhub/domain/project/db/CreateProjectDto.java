@@ -4,6 +4,7 @@ package com.gbsw.gbswhub.domain.project.db;
 import com.gbsw.gbswhub.domain.project.model.Project.Status;
 import com.gbsw.gbswhub.domain.project.model.Project.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -32,7 +33,6 @@ public class CreateProjectDto {
     @NotBlank(message = "인원수를 입력해주세요.")
     @Schema(example = "1~2명")
     private String people;
-
 
     @NotEmpty(message = "스택을 입력해주세요.")
     @Schema(example = "[\"ios\", \"frontend\", \"backend\"]")

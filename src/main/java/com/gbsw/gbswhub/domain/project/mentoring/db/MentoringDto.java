@@ -2,6 +2,7 @@ package com.gbsw.gbswhub.domain.project.mentoring.db;
 
 import com.gbsw.gbswhub.domain.project.model.Project;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -52,8 +53,14 @@ public class MentoringDto {
 
     private Project.Status status = Project.Status.RECRUITING;
 
-
     @NotNull(message = "카테고리를 선택해주세요.")
     @Schema(description = "카테고리 테이블에 저장된 ID", example = "1")
     private Long categoryId;
+
+    @NotNull(message = "사용자 ID를 입력해주세요.")
+    @Schema(example = "1")
+    private Long userId;
+
+    @Schema(example = "이수환")
+    private String name;
 }

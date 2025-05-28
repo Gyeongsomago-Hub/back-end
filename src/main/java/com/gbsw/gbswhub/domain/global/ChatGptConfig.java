@@ -11,7 +11,7 @@ public class ChatGptConfig {
     @Value("${spring.ai.openai.api-key}")
     private String secretKey;
 
-    @Value("${spring.ai.openai.chat.model}")
+    @Value("${spring.ai.openai.chat-model}")
     private String model;
 
     @Value("${spring.ai.openai.base-url}")

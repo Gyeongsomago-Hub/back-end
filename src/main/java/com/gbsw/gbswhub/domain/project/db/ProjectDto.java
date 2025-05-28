@@ -47,4 +47,11 @@ public class ProjectDto {
     private LocalDate closeDate;
 
     private Project.Status status = Project.Status.RECRUITING;
+
+    @NotNull(message = "사용자 ID를 입력해주세요.")
+    @Schema(example = "1")
+    private Long userId;
+
+    @Schema(example = "이수환")
+    private String name;
 }
