@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChatRoom {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,4 @@ public class ChatRoom {
     @ManyToOne
     @JoinColumn(name="receiver_id")
     private User receiver;
-
-
 }

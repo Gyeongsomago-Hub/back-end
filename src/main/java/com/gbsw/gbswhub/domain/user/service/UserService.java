@@ -129,4 +129,10 @@ public class UserService {
 
         userRepository.delete(user);
     }
+
+    @Transactional(readOnly = true)
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
 }

@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChatMessage {
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long message_id;
+    private Long message_id;
 
     @Column(nullable = false)
     private String content;
@@ -29,5 +29,5 @@ public class ChatMessage {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    private ChatRoom chatRoom;
+    private Room chatRoom;
 }

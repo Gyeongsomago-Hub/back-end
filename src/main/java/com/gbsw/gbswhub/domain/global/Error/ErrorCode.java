@@ -22,6 +22,8 @@ public enum ErrorCode {
 
     PART_CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "동아리 신청을 찾을 수 없습니다."),
 
+    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
+
     PART_NOT_FOUND(HttpStatus.NOT_FOUND, "신청을 찾을 수 없습니다."),
 
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
