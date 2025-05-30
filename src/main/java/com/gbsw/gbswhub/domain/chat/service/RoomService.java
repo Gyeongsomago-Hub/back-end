@@ -13,8 +13,6 @@ import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,12 +29,11 @@ public class RoomService {
     private final UserService userService;
     private final RoomRepository roomRepository;
 
-    public Map<String, Object> createRoom(long receiverId, User sender) {
+    public Long createRoom(User sender, User receiver) {
         validateUser(sender);
+        validateUser(receiver);
 
-        User receiver = userService.getUserById(receiverId);
-        validateUser(sender);
-
+        // 기존 채팅방 있는지 확인
         Room room = roomRepository.findBySenderAndReceiver(sender, receiver)
                 .orElseGet(() -> {
                     Room newRoom = Room.builder()
@@ -55,12 +52,9 @@ public class RoomService {
             return topic;
         });
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "채팅방이 생성되었습니다.");
-        response.put("roomId", roomId);
-        response.put("receiver", receiver.getName());
-        return response;
+        return room.getRoom_id();
     }
+
 
     public Room findRoom(long roomId) {
         Room room = findExistRoom(roomId);

@@ -93,4 +93,16 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "사용자 조회", description = "사용자의 정보를 user_id로 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "사용자 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = UserDto.class)))
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto userDto = userService.getUserDtoById(id);
+        return ResponseEntity.ok(userDto);
+    }
 }

@@ -75,7 +75,7 @@ public class UserService {
         }
 
         user = userRepository.findById(userId)
-                        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         user.setUsername(dto.getUsername());
         user.setName(dto.getName());
@@ -93,10 +93,10 @@ public class UserService {
                 user.getClassNumber(),
                 user.getDepartment(),
                 user.getRole()
-                );
+        );
     }
 
-    public List<UserDto> getAllUsers(String username){
+    public List<UserDto> getAllUsers(String username) {
         User user = getUser(username);
 
         if (!user.getRole().equals(User.Role.ADMIN)) {
@@ -120,7 +120,7 @@ public class UserService {
     public void deleteUser(Long userId, String username) {
         User user = getUser(username);
 
-        if(!user.getRole().equals(User.Role.ADMIN)) {
+        if (!user.getRole().equals(User.Role.ADMIN)) {
             throw new BusinessException(ErrorCode.ACCESS_DENIED);
         }
 
@@ -128,6 +128,22 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserDtoById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        return new UserDto(
+                user.getUser_id(),
+                user.getUsername(),
+                user.getName(),
+                user.getGrade(),
+                user.getClassNumber(),
+                user.getDepartment(),
+                user.getRole()
+        );
     }
 
     @Transactional(readOnly = true)
