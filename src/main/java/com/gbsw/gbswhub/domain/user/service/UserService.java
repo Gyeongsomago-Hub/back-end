@@ -129,4 +129,20 @@ public class UserService {
 
         userRepository.delete(user);
     }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserDtoById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        return new UserDto(
+                user.getUser_id(),
+                user.getUsername(),
+                user.getName(),
+                user.getGrade(),
+                user.getClassNumber(),
+                user.getDepartment(),
+                user.getRole()
+        );
+    }
 }
