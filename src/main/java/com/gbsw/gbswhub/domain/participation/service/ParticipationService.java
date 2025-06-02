@@ -12,6 +12,7 @@ import com.gbsw.gbswhub.domain.participation.db.mentoring.RequestMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.UpdateMentoringStatusDto;
 import com.gbsw.gbswhub.domain.participation.db.project.RequestProjectDto;
+import com.gbsw.gbswhub.domain.participation.mapper.ParticipationMapper;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
 import com.gbsw.gbswhub.domain.project.model.Project;
@@ -34,6 +35,7 @@ public class ParticipationService {
     private final ParticipationRepository participationRepository;
     private final ProjectRepository projectRepository;
     private final ClubRepository clubRepository;
+    private final ParticipationMapper participationMapper;
 
     public Map<String, String> RequestProject(RequestProjectDto dto, User user) {
 
@@ -108,6 +110,7 @@ public class ParticipationService {
             throw new BusinessException(ErrorCode.ALREADY_PARTICIPATED);
         }
 
+
         Participation participation = Participation.builder()
                 .introduce(dto.getIntroduce())
                 .name(dto.getName())
@@ -166,16 +169,7 @@ public class ParticipationService {
 
         List<Participation> participations = participationRepository.findByUser(user);
 
-
-        return participations.stream()
-                .map(participation -> MyParticipationDto.builder()
-                        .part_id(participation.getPart_id().toString())
-                        .introduce(participation.getIntroduce())
-                        .type(participation.getType())
-                        .status(participation.getStatus())
-                        .position(participation.getPosition())
-                        .build())
-                .collect(Collectors.toList());
+        return participationMapper.toMyParticipationDtoList(participations);
     }
 
 
@@ -202,19 +196,7 @@ public class ParticipationService {
 
         List<Participation> participations = participationRepository.findAllByClub_Id(clubId);
 
-        return participations.stream()
-                .map(participation -> ResponseClubDto.builder()
-                        .id(participation.getPart_id())
-                        .introduce(participation.getIntroduce())
-                        .name(participation.getName())
-                        .grade(participation.getGrade())
-                        .classNo(participation.getClassNo())
-                        .studentNo(participation.getStudentNo())
-                        .clubId(participation.getClub().getId())
-                        .type(participation.getType())
-                        .status(participation.getStatus())
-                        .build())
-                .collect(Collectors.toList());
+        return participationMapper.toResponseClubDtoList(participations);
     }
 
     public List<ResponseMentoringDto> getRequestByMentoring(User user, Long projectId) {
@@ -227,18 +209,6 @@ public class ParticipationService {
 
         List<Participation> participations = participationRepository.findAllByProject_Id(projectId);
 
-        return participations.stream()
-                .map(participation -> ResponseMentoringDto.builder()
-                        .id(participation.getPart_id())
-                        .introduce(participation.getIntroduce())
-                        .grade(participation.getGrade())
-                        .position(participation.getPosition())
-                        .classNo(participation.getClassNo())
-                        .studentNo(participation.getStudentNo())
-                        .name(participation.getName())
-                        .type(participation.getType())
-                        .status(participation.getStatus())
-                        .build())
-                .collect(Collectors.toList());
+        return participationMapper.toResponseMentoringDtoList(participations);
     }
 }

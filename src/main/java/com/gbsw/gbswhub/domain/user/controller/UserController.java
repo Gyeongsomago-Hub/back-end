@@ -38,18 +38,18 @@ public class UserController {
     }
 
 
-    @GetMapping("/my")
-    @Operation(summary = "사용자 조회", description = "사용자 정보를 조회합니다.")
-    @ApiResponse(responseCode = "200", description = "사용자 정보 조회 성공",
-            content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))))
-    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
-    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
-    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
-    public ResponseEntity<UserDto> getUserInfo(Principal principal){
-
-        return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
-    }
+//    @GetMapping("/my")
+//    @Operation(summary = "사용자 조회", description = "사용자 정보를 조회합니다.")
+//    @ApiResponse(responseCode = "200", description = "사용자 정보 조회 성공",
+//            content = @Content(mediaType = "application/json",
+//                    array = @ArraySchema(schema = @Schema(implementation = UserDto.class))))
+//    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+//    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+//    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+//    public ResponseEntity<UserDto> getUserInfo(Principal principal){
+//
+//        return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
+//    }
 
     @PatchMapping("/{id}")
     @Operation(summary = "사용자 정보 수정", description = "사용자 정보를 수정합니다.")
