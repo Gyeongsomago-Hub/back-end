@@ -63,10 +63,11 @@ public class ParticipationService {
         return response;
     }
 
+    @Transactional
     public Map<String, String> RequestMentoring(RequestMentoringDto dto, User user) {
         validateUser(user);
 
-        Project project = projectRepository.findById(dto.getProjectId())
+        Project project = projectRepository.findByIdForUpdate(dto.getProjectId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENTORING_NOT_FOUND));
 
         if (project.getType() != Project.Type.MENTORING) {
