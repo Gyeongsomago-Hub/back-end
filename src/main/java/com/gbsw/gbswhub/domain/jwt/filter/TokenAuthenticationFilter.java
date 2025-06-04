@@ -44,6 +44,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals("/api/actuator/health");
+    }
+    
     private String getAccessToken(String authorizationHeader) {
         String PREFIX = "Bearer ";
         if(authorizationHeader != null && authorizationHeader.startsWith(PREFIX))
