@@ -54,7 +54,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/project/*", "GET"),
                                 new AntPathRequestMatcher("/api/club", "GET"),
                                 new AntPathRequestMatcher("/api/club/*", "GET"),
-                                new AntPathRequestMatcher("/api/user/{id}", "GET")
+                                new AntPathRequestMatcher("/api/user/*", "GET")
                         )
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/category", "/api/category/*").permitAll()
@@ -81,7 +81,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:5173",
+                "https://gbswhub.kro.kr"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
