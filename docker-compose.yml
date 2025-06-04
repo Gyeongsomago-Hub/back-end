@@ -3,7 +3,7 @@ services:
     image: suhwan4763/soccerfriend:latest
     container_name: gbswhub-backend-server
     ports:
-      - "80:8080"
+      - "8060:8080"
     environment:
       - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${USER_NAME}
