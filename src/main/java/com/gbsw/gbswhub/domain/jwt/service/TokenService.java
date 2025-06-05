@@ -33,29 +33,27 @@ public class TokenService {
 
     public Map<String, String> getAccessToken(AccessTokenRequest request) {
         User user = userService.getUser(request.getUsername());
-
         validateUser(user);
-
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
-
         return createAccessToken(user, null);
     }
 
-
     private Map<String, String> createAccessToken(User user, String refreshToken) {
         Duration tokenDuration = Duration.ofDays(jwtProperties.getDuration());
-        Duration refreshDutation = Duration.ofDays(jwtProperties.getRefreshDuration());
+        Duration refreshDuration = Duration.ofDays(jwtProperties.getRefreshDuration());
 
         RefreshToken savedRefreshToken = refreshTokenRepository.findByUsername(user.getUsername()).orElse(null);
 
         if (savedRefreshToken != null && refreshToken != null) {
-            if (!savedRefreshToken.getRefreshToken().equals(refreshToken))
-               throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            if (!savedRefreshToken.getRefreshToken().equals(refreshToken)) {
+                throw new BusinessException(ErrorCode.INVALID_TOKEN);
+            }
         }
+
         String accessToken = tokenProvider.generateToken(user, tokenDuration, true);
-        String newRefreshToken = tokenProvider.generateToken(user, refreshDutation, false);
+        String newRefreshToken = tokenProvider.generateToken(user, refreshDuration, false);
 
         if (savedRefreshToken == null) {
             savedRefreshToken = new RefreshToken(user.getUsername(), newRefreshToken);
@@ -89,7 +87,6 @@ public class TokenService {
         }
 
         User user = userService.getUser(claims.getSubject());
-
         return createAccessToken(user, request.getRefreshToken());
     }
 }

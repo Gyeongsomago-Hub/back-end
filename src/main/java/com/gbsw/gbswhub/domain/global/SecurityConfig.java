@@ -27,7 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableMethodSecurity()
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final TokenExceptionFilter tokenExceptionFilter;
@@ -55,11 +55,9 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/club", "GET"),
                                 new AntPathRequestMatcher("/api/club/*", "GET"),
                                 new AntPathRequestMatcher("/api/user/*", "GET")
-                        )
-                        .permitAll()
+                        ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/category", "/api/category/*").permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

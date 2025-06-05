@@ -20,10 +20,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_TOKEN); // 혹은 UNAUTHORIZED도 가능
         response.setStatus(ErrorCode.INVALID_TOKEN.getStatus().value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        objectMapper.writeValue(response.getWriter(), errorResponse);
+        objectMapper.writeValue(response.getWriter(), new ErrorResponse(ErrorCode.INVALID_TOKEN));
     }
 }
