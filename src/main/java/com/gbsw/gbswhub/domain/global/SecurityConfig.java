@@ -32,10 +32,8 @@ public class SecurityConfig {
 
     private final TokenExceptionFilter tokenExceptionFilter;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
-    @Order(1)
     SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
                 .securityMatcher(new AntPathRequestMatcher("/api/**"))
@@ -58,9 +56,6 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/category", "/api/category/*").permitAll()
                         .anyRequest().authenticated()
-                )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
