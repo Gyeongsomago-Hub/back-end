@@ -27,6 +27,13 @@ public class TokenExceptionFilter extends OncePerRequestFilter {
         }
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals("/api/actuator/health");
+    }
+
+
     public void setErrorResponse(HttpServletResponse res, Throwable ex) throws IOException {
         res.setStatus(HttpStatus.UNAUTHORIZED.value());
         res.setContentType("application/json; charset=utf-8");
