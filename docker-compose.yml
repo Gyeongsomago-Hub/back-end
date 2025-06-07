@@ -1,6 +1,8 @@
 services:
   backend-server:
-    image: suhwan4763/soccerfriend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: gbswhub-backend-server
     ports:
       - "8080:8080"
