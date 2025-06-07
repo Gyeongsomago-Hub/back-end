@@ -1,9 +1,4 @@
-FROM gradle:8.2.1-jdk21 AS builder
-WORKDIR /app
-COPY . .
-RUN gradle clean build -x test
-
 FROM openjdk:21
-WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
