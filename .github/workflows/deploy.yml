@@ -26,4 +26,4 @@ jobs:
             docker-compose down
             docker-compose build
             docker-compose up -d
-          EOFAdd comment
+          EOF
