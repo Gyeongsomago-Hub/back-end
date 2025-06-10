@@ -1,4 +1,4 @@
-name: Deploy to EC2 using Docker Compose
+name: Deploy to EC2 using Docker ComposeAdd commentMore actions
 
 on:
   push:
@@ -17,25 +17,13 @@ jobs:
         run: |
           echo "${{ secrets.PRIVATE_KEY }}" > key.pem
           chmod 600 key.pem
-
-      - name: Deploy to EC2 and run Docker Compose
+      - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.HOST_PROD }} << 'EOF'
-            set -e  # 실패 시 종료
-
             cd /home/${{ secrets.EC2_USER }}/back-end
-
-            echo "Fetching latest code..."
-            git fetch origin master
-            git reset --hard origin/master
-
-            echo "Building the project..."
-            ./gradlew clean build
-
-            echo "Restarting containers..."
+            git pull origin master
+            ./gradlew build
             docker-compose down
-            docker-compose build --no-cache
+            docker-compose build
             docker-compose up -d
-
-            echo "Deployment finished successfully."
-          EOF
+          EOFAdd comment
