@@ -6,7 +6,6 @@ services:
     container_name: gbswhub-backend-server
     ports:
       - "8080:8080"
-      - # 주석주석주석주석
     environment:
       - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${USER_NAME}
@@ -24,4 +23,4 @@ services:
 
 networks:
   my-app-network:
-    driver: bridge
+    driver: bridge # 기본 브리지 네트워크
