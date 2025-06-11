@@ -44,6 +44,7 @@ public class UserController {
             content = @Content(mediaType = "application/json",
                     array = @ArraySchema(schema = @Schema(implementation = UserDto.class))))
     @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
     public ResponseEntity<UserDto> getUserInfo(Principal principal){
@@ -99,10 +100,11 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "사용자 조회 성공",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = UserDto.class)))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
     @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
     @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        UserDto userDto = userService.getUserDtoById(id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id, Principal principal) {
+        UserDto userDto = userService.getUserDtoById(id, principal.getName());
         return ResponseEntity.ok(userDto);
     }
 }

@@ -51,8 +51,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/project", "GET"),
                                 new AntPathRequestMatcher("/api/project/*", "GET"),
                                 new AntPathRequestMatcher("/api/club", "GET"),
-                                new AntPathRequestMatcher("/api/club/*", "GET"),
-                                new AntPathRequestMatcher("/api/user/*", "GET")
+                                new AntPathRequestMatcher("/api/club/*", "GET")
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/category", "/api/category/*").permitAll()
                         .anyRequest().authenticated()

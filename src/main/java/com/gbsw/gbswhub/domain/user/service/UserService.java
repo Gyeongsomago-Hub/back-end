@@ -131,18 +131,25 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDto getUserDtoById(Long id) {
-        User user = userRepository.findById(id)
+    public UserDto getUserDtoById(Long id, String username) {
+        User requester = getUser(username);
+
+        User targetUser = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
+        if (!targetUser.getUsername().equals(username) && !requester.getRole().equals(User.Role.ADMIN)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
         return new UserDto(
-                user.getUser_id(),
-                user.getUsername(),
-                user.getName(),
-                user.getGrade(),
-                user.getClassNumber(),
-                user.getDepartment(),
-                user.getRole()
+                targetUser.getUser_id(),
+                targetUser.getUsername(),
+                targetUser.getName(),
+                targetUser.getGrade(),
+                targetUser.getClassNumber(),
+                targetUser.getDepartment(),
+                targetUser.getRole()
         );
     }
+
 }
