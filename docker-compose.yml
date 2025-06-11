@@ -23,4 +23,4 @@ services:
 
 networks:
   my-app-network:
-    driver: bridge # 기본 브리지 네트워크
+    driver: bridge # 배포 확인 주석
