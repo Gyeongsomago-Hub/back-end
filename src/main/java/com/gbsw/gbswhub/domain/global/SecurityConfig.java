@@ -75,7 +75,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
-                "https://gbswhub.kro.kr"
+                "https://gbswhub.kro.kr",
+                "https://www.gbswhub.kro.kr"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
