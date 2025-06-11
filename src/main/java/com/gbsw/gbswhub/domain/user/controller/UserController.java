@@ -94,7 +94,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @Operation(summary = "사용자 조회", description = "사용자의 정보를 user_id로 조회합니다.")
     @ApiResponse(responseCode = "200", description = "사용자 조회 성공",
             content = @Content(mediaType = "application/json",
