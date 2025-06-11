@@ -51,19 +51,19 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
-//    @Transactional(readOnly = true)
-//    public UserDto getUserInfo(String username) {
-//        User user = getUser(username);
-//        return new UserDto(
-//                user.getUser_id(),
-//                user.getUsername(),
-//                user.getName(),
-//                user.getGrade(),
-//                user.getClassNumber(),
-//                user.getDepartment(),
-//                user.getRole()
-//        );
-//    }
+    @Transactional(readOnly = true)
+    public UserDto getUserInfo(String username) {
+        User user = getUser(username);
+        return new UserDto(
+                user.getUser_id(),
+                user.getUsername(),
+                user.getName(),
+                user.getGrade(),
+                user.getClassNumber(),
+                user.getDepartment(),
+                user.getRole()
+        );
+    }
 
     public UserDto updateUser(Long userId, String username, UpdateUserDto dto) {
 
