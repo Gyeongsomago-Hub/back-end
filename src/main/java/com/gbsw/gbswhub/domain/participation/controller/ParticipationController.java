@@ -136,7 +136,7 @@ public class ParticipationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/project{id}")
+    @GetMapping("/project/{id}")
     @Operation(summary = "특정 프로젝트 신청 내역 조회", description = "프로젝트 글쓴이가 자신의 프로젝트 신청 내역을 모두 조회합니다.")
     @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
             content = @Content(mediaType = "application/json",
@@ -153,7 +153,7 @@ public class ParticipationController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @GetMapping("/club{id}")
+    @GetMapping("/club/{id}")
     @Operation(summary = "특정 동아리 신청 내역 조회", description = "동아리장이 자신의 동아리의 신청 내역을 모두 조회합니다.")
     @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
             content = @Content(mediaType = "application/json",
