@@ -3,6 +3,7 @@ package com.gbsw.gbswhub.domain.participation.mapper;
 import com.gbsw.gbswhub.domain.participation.db.MyParticipationDto;
 import com.gbsw.gbswhub.domain.participation.db.club.ResponseClubDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
+import com.gbsw.gbswhub.domain.participation.db.project.ResponseProjectDto;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,16 @@ public class ParticipationMapper {
                 .type(participation.getType())
                 .status(participation.getStatus())
                 .position(participation.getPosition())
+                .build();
+    }
+
+    public ResponseProjectDto toResponseProjectDto(Participation participation) {
+        return ResponseProjectDto.builder()
+                .id(participation.getPart_id())
+                .position(participation.getPosition())
+                .ProjectId(participation.getProject().getId())
+                .type(participation.getType())
+                .status(participation.getStatus())
                 .build();
     }
 
@@ -56,6 +67,11 @@ public class ParticipationMapper {
                 .collect(Collectors.toList());
     }
 
+    public List<ResponseProjectDto> toResponseProjectDtoList(List<Participation> participations) {
+        return participations.stream()
+                .map(this::toResponseProjectDto)
+                .collect(Collectors.toList());
+    }
     public List<ResponseClubDto> toResponseClubDtoList(List<Participation> participations) {
         return participations.stream()
                 .map(this::toResponseClubDto)

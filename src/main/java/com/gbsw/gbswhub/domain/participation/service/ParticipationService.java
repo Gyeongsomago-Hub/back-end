@@ -12,6 +12,7 @@ import com.gbsw.gbswhub.domain.participation.db.mentoring.RequestMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.UpdateMentoringStatusDto;
 import com.gbsw.gbswhub.domain.participation.db.project.RequestProjectDto;
+import com.gbsw.gbswhub.domain.participation.db.project.ResponseProjectDto;
 import com.gbsw.gbswhub.domain.participation.mapper.ParticipationMapper;
 import com.gbsw.gbswhub.domain.participation.model.Participation;
 import com.gbsw.gbswhub.domain.project.db.ProjectRepository;
@@ -186,6 +187,21 @@ public class ParticipationService {
         }
         participationRepository.delete(participation);
     }
+
+    public List<ResponseProjectDto> getRequestByProject(User user, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PROJECT_NOT_FOUND));
+
+        if (!project.isOwner(user)) {
+            throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        }
+
+        List<Participation> participations = participationRepository.findAllByProject_Id(projectId);
+
+        return participationMapper.toResponseProjectDtoList(participations);
+
+    }
+
 
     public List<ResponseClubDto> getRequestByClub(User user, Long clubId) {
 

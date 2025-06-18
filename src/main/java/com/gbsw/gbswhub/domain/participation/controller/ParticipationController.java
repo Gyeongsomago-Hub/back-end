@@ -8,6 +8,7 @@ import com.gbsw.gbswhub.domain.participation.db.mentoring.RequestMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.ResponseMentoringDto;
 import com.gbsw.gbswhub.domain.participation.db.mentoring.UpdateMentoringStatusDto;
 import com.gbsw.gbswhub.domain.participation.db.project.RequestProjectDto;
+import com.gbsw.gbswhub.domain.participation.db.project.ResponseProjectDto;
 import com.gbsw.gbswhub.domain.participation.service.ParticipationService;
 import com.gbsw.gbswhub.domain.user.model.User;
 import com.gbsw.gbswhub.domain.user.service.UserService;
@@ -133,6 +134,23 @@ public class ParticipationController {
 
         participationService.deleteParticipation(id, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/project{id}")
+    @Operation(summary = "특정 프로젝트 신청 내역 조회", description = "프로젝트 글쓴이가 자신의 프로젝트 신청 내역을 모두 조회합니다.")
+    @ApiResponse(responseCode = "200", description = "요청 목록 조회 성공",
+            content = @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ResponseProjectDto.class))))
+    @ApiResponse(responseCode = "401", ref = "#/components/responses/Login401")
+    @ApiResponse(responseCode = "403", ref = "#/components/responses/403")
+    @ApiResponse(responseCode = "404", ref = "#/components/responses/404")
+    @ApiResponse(responseCode = "500", ref = "#/components/responses/500")
+    public ResponseEntity<List<ResponseProjectDto>> getAllProjectById(@PathVariable Long id, Principal principal) {
+        User user = userService.getUser(principal.getName());
+
+        List<ResponseProjectDto> dtoList = participationService.getRequestByProject(user, id);
+
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping("/club{id}")
