@@ -53,6 +53,7 @@ public class ChatGptService {
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", chatGptConfig.getModel());
+        System.out.println("현재 사용 중인 GPT 모델: " + chatGptConfig.getModel());
         requestBody.put("messages", List.of(message));
         requestBody.put("max_tokens", maxTokens);
 
